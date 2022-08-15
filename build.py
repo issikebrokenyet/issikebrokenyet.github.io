@@ -163,49 +163,48 @@ with open('attacks.yml') as att:
             for s in schemes.values():
                 s.link(assumptions)
 
-            print("""
-            <!Doctype html>
-            <html>
-            <head>
-              <title>Is SIKE broken yet?</title>
-              <meta name="description"
-                    content="A knowledge base of most isogeny based cryptosystem and the best attacks on them." />
-              <link rel="stylesheet" href="style.css" />
-            </head>
-            <body>
-              <h1>Is SIKE broken yet?</h1>
-              <h2 id="schemes">Schemes</h2>
-              <table>
-              <thead>
-              %s
-              </thead>
-              <tbody>
-              %s
-              </tbody>
-              </table>
-              <h2 id="assumptions">Assumptions</h2>
-              <table>
-              <thead>
-              %s
-              </thead>
-              <tbody>
-              %s
-              </tbody>
-              </table>
-              <h2 id="attacks">Attacks</h2>
-              <table>
-              <thead>
-              %s
-              </thead>
-              <tbody>
-              %s
-              </tbody>
-              </table>
-              <footer>
-                <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
-              </footer>
-            </body>
-            </html>
+            print("""<!DOCTYPE html>
+<html>
+<head>
+  <title>Is SIKE broken yet?</title>
+  <meta name="description"
+        content="A knowledge base of most isogeny based cryptosystem and the best attacks on them." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Is SIKE broken yet?</h1>
+  <h2 id="schemes">Schemes</h2>
+  <table>
+  <thead>
+  %s
+  </thead>
+  <tbody>
+  %s
+  </tbody>
+  </table>
+  <h2 id="assumptions">Assumptions</h2>
+  <table>
+  <thead>
+  %s
+  </thead>
+  <tbody>
+  %s
+  </tbody>
+  </table>
+  <h2 id="attacks">Attacks</h2>
+  <table>
+  <thead>
+  %s
+  </thead>
+  <tbody>
+  %s
+  </tbody>
+  </table>
+  <footer>
+    <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
+  </footer>
+</body>
+</html>
             """ % (
                 Scheme.header,
                 "\n".join(repr(a) for a in schemes.values()),
