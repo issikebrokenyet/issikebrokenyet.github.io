@@ -38,9 +38,9 @@ class Attack(Entry):
     template = Template("""
     <tr id="{{ id }}"
         class="quantum-{{ quantum | default(false) }}
-        complexity {{ complexity }}">
+        complexity">
     <td class="name">{{ this.name() }}</td>
-    <td class="complexity">{{ this.complexity() }}</td>
+    <td class="complexity {{ complexity }}">{{ this.complexity() }}</td>
     <td class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</td>
     <td class="reference">{{ this.reference() }}</td>
     </tr>
@@ -183,13 +183,23 @@ with open('attacks.yml') as att:
             for s in schemes.values():
                 s.link(assumptions)
 
-            print("""<!DOCTYPE html>
+
+print("""<!DOCTYPE html>
 <html>
 <head>
   <title>Is SIKE broken yet?</title>
   <meta name="description"
         content="A knowledge base of most isogeny based cryptosystem and the best attacks on them." />
   <link rel="stylesheet" href="style.css" />
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$']]}
+  });
+  </script>
+  <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
 </head>
 <body>
   <h1>Is SIKE broken yet?</h1>
@@ -224,8 +234,7 @@ with open('attacks.yml') as att:
     <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
   </footer>
 </body>
-</html>
-            """ % (
+</html>""" % (
                 Scheme.header,
                 "\n".join(repr(a) for a in schemes.values()),
                 Assumption.header,

@@ -13,8 +13,17 @@
     --cell-border: #d0d7de;
 }
 
+html{
+    margin: 0 1em;
+}
 body{
-    margin: 2em 1em;
+    margin: 1em auto;
+    max-width: 850px;
+    min-width: 544px;
+}
+
+p,ul {
+    line-height: 1.8;
 }
 
 h1{
@@ -32,6 +41,7 @@ a:visited{
 table {
     border-collapse: collapse;
     margin-bottom: 3em;
+    /*line-height: 1;*/
 }
 th{
     text-align: left;
@@ -72,11 +82,7 @@ a.reference-link:visited{
     color: var(--link-visited);
 }
 
-.name{
-    color: var(--text);
-}
-
 footer {
-    margin-top: 1em;
+    margin: 2em 0;
     text-align: center;
 }
