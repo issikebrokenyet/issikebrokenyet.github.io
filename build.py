@@ -32,15 +32,17 @@ class Attack(Entry):
       <th>Name</th>
       <th>Complexity</th>
       <th>Quantum?</th>
+      <th>Reference</th>
     </tr>
     """
     template = Template("""
     <tr id="{{ id }}"
         class="quantum-{{ quantum | default(false) }}
-        complexity-{{ complexity }}">
+        complexity">
     <td class="name">{{ this.name() }}</td>
-    <td class="complexity">{{ this.complexity() }}</td>
-    <td class="quantum">{% if quantum %}yes{% else %}no{% endif %}</td>
+    <td class="complexity {{ complexity }}">{{ this.complexity() }}</td>
+    <td class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</td>
+    <td class="reference">{{ this.reference() }}</td>
     </tr>
     """)
 
@@ -51,6 +53,17 @@ class Attack(Entry):
         return { 'poly': SecLvl.POLY,
                  'subexp': SecLvl.SUBEXP,
                  'exp': SecLvl.EXP }[self.props['complexity']]
+
+    def reference(self):
+        links = []
+        reference_dict = self.props.get("references", {})
+
+        for slug, url in reference_dict.items():
+            link = f'<a class="reference-link" href="{url}" target="_blank">{slug}</a>'
+            links.append(link)
+        if links:
+            return " ".join(links)
+        return "-" 
 
 class Trivial(Attack):
     def __init__(self):
@@ -71,11 +84,11 @@ class Assumption(Entry):
     template = Template("""
     <tr id="{{ id }}">
     <td class="name">{{ this.name() }}</td>
-    <td class="c_sec complexity-{{ this.security(False) }}">
+    <td class="c_sec complexity {{ this.security(False) }}">
     <a href="#{{ this.best_attack(False).props.id }}"
        title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
     </td>
-    <td class="q_sec complexity-{{ this.security() }}">
+    <td class="q_sec complexity {{ this.security() }}">
     <a href="#{{ this.best_attack().props.id }}"
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
@@ -124,12 +137,12 @@ class Scheme(Entry):
     template = Template("""
     <tr id="{{ id }}">
     <td class="name">{{ this.name() }}</td>
-    <td class="type">{{ type }}</td>
-    <td class="c_sec complexity-{{ this.security(False) }}">
+    <td class="type">{{ this.format_type() }}</td>
+    <td class="c_sec complexity {{ this.security(False) }}">
     <a href="#{{ this.best_attack(False).props.id }}"
        title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
     </td>
-    <td class="q_sec complexity-{{ this.security() }}">
+    <td class="q_sec complexity {{ this.security() }}">
     <a href="#{{ this.best_attack().props.id }}"
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
@@ -147,6 +160,13 @@ class Scheme(Entry):
 
     def security(self, quantum=True):
         return self.best_attack(quantum).complexity()
+
+    def format_type(self):
+        type_data = self.props['type']
+        if isinstance(type_data, list):
+            return ", ".join(type_data)
+        return type_data
+
     
 with open('attacks.yml') as att:
     with open('assumptions.yml') as ass:
@@ -163,50 +183,58 @@ with open('attacks.yml') as att:
             for s in schemes.values():
                 s.link(assumptions)
 
-            print("""
-            <!Doctype html>
-            <html>
-            <head>
-              <title>Is SIKE broken yet?</title>
-              <meta name="description"
-                    content="A knowledge base of most isogeny based cryptosystem and the best attacks on them." />
-              <link rel="stylesheet" href="style.css" />
-            </head>
-            <body>
-              <h1>Is SIKE broken yet?</h1>
-              <h2 id="schemes">Schemes</h2>
-              <table>
-              <thead>
-              %s
-              </thead>
-              <tbody>
-              %s
-              </tbody>
-              </table>
-              <h2 id="assumptions">Assumptions</h2>
-              <table>
-              <thead>
-              %s
-              </thead>
-              <tbody>
-              %s
-              </tbody>
-              </table>
-              <h2 id="attacks">Attacks</h2>
-              <table>
-              <thead>
-              %s
-              </thead>
-              <tbody>
-              %s
-              </tbody>
-              </table>
-              <footer>
-                <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
-              </footer>
-            </body>
-            </html>
-            """ % (
+
+print("""<!DOCTYPE html>
+<html>
+<head>
+  <title>Is SIKE broken yet?</title>
+  <meta name="description"
+        content="A knowledge base of most isogeny based cryptosystem and the best attacks on them." />
+  <link rel="stylesheet" href="style.css" />
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$']]}
+  });
+  </script>
+  <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+</head>
+<body>
+  <h1>Is SIKE broken yet?</h1>
+  <h2 id="schemes">Schemes</h2>
+  <table>
+  <thead>
+  %s
+  </thead>
+  <tbody>
+  %s
+  </tbody>
+  </table>
+  <h2 id="assumptions">Assumptions</h2>
+  <table>
+  <thead>
+  %s
+  </thead>
+  <tbody>
+  %s
+  </tbody>
+  </table>
+  <h2 id="attacks">Attacks</h2>
+  <table>
+  <thead>
+  %s
+  </thead>
+  <tbody>
+  %s
+  </tbody>
+  </table>
+  <footer>
+    <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
+  </footer>
+</body>
+</html>""" % (
                 Scheme.header,
                 "\n".join(repr(a) for a in schemes.values()),
                 Assumption.header,
