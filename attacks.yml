@@ -65,6 +65,12 @@ kuperberg:
   quantum: yes
   references:
     Kup04: "https://arxiv.org/abs/quant-ph/0302112"
+    CJS13: "https://doi.org/10.1515/jmc-2012-0016"
+  comment: >-
+    [Kup04] describes a generic quantum algorithm to solve the hidden
+    shift problem (equivalently, the dihedral hidden subgroup
+    problem). [CJS13] uses Kuperberg's algorithm as a subroutine to
+    attack the vectorization problem.
 
 galbraith:
   name:
