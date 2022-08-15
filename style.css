@@ -1,13 +1,47 @@
+* {
+    font-family:  sans-serif;
+}
+
+:root{
+    --red: #cf222e;
+    --orange: #ffa700;
+    --green: #2da44e;
+    --text:  black;
+    --link: #0969da;
+    --link-visited: #8250df;
+    --highlight: #f6f8fa;
+    --cell-border: #d0d7de;
+}
+
+body{
+    margin: 2em 1em;
+}
+
+h1{
+    text-align: center;
+    margin-bottom: 2em;
+}
+
+a,a:hover{
+    color: var(--link);
+}
+a:visited{
+    color: var(--link-visited);
+}
+
 table {
     border-collapse: collapse;
+    margin-bottom: 3em;
+}
+th{
+    text-align: left;
 }
 tr:nth-child(even) {
-    background-color: #eee;
+    background-color: var(--highlight);
 }
-td, th {
-    padding: 2px 4px;
-    border-left: solid thin gray;
-    border-right: solid thin gray;
+th, td {
+    padding: 13px 15px 11px 15px;
+    border: solid 1px var(--cell-border);
 }
 td a {
     color: inherit;
@@ -17,14 +51,29 @@ abbr[title=""] {
     text-decoration: none;
 }
 
-.complexity-exp {
-    color: green;
+.complexity.exp {
+    color: var(--green);
 }
-.complexity-subexp {
-    color: orange;
+.complexity.subexp {
+    color: var(--orange);
 }
-.complexity-poly {
-    color: red;
+.complexity.poly {
+    color: var(--red);
+}
+
+.complexity a{
+    color: inherit;
+}
+
+a.reference-link{
+    color: var(--link);
+}
+a.reference-link:visited{
+    color: var(--link-visited);
+}
+
+.name{
+    color: var(--text);
 }
 
 footer {
