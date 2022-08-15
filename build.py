@@ -55,9 +55,15 @@ class Attack(Entry):
                  'exp': SecLvl.EXP }[self.props['complexity']]
 
     def reference(self):
-        if self.props.get("reference"):
-            return f'<a class="reference-link" href="{self.props["reference"].get("url", "#")}">{self.props["reference"].get("slug", "link")}</a>'
-        return "-"
+        links = []
+        reference_dict = self.props.get("references", {})
+
+        for slug, url in reference_dict.items():
+            link = f'<a class="reference-link" href="{url}" target="_blank">[{slug}]</a>'
+            links.append(link)
+        if links:
+            return " ".join(links)
+        return "-" 
 
 class Trivial(Attack):
     def __init__(self):
