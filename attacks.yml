@@ -13,17 +13,17 @@ tani:
 vow:
   name:
     short: vOW
-    long: van Oorschot–Wiener
+    long: van Oorschot-Wiener
   complexity: exp
   
 castryck-decru:
   name:
-    long: Castryck–Decru
+    long: Castryck-Decru
   complexity: poly
 
 maino-martindale:
   name:
-    long: Maino–Martindale
+    long: Maino-Martindale
   complexity: subexp
     
 robert:
@@ -34,13 +34,13 @@ robert:
 delfs-galbraith:
   name:
     short: DG
-    long: Delfs–Galbraith
+    long: Delfs-Galbraith
   complexity: exp
     
 biasse-jao-sankar:
   name:
     short: BJS
-    long: Biasse–Jao–Sankar
+    long: Biasse-Jao-Sankar
   complexity: exp
   quantum: yes
 
