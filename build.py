@@ -41,7 +41,7 @@ class Attack(Entry):
         complexity-{{ complexity }}">
     <td class="name">{{ this.name() }}</td>
     <td class="complexity">{{ this.complexity() }}</td>
-    <td class="quantum">{% if quantum %}yes{% else %}no{% endif %}</td>
+    <td class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</td>
     <td class="reference">{{ this.reference() }}</td>
     </tr>
     """)
