@@ -32,6 +32,7 @@ class Attack(Entry):
       <th>Name</th>
       <th>Complexity</th>
       <th>Quantum?</th>
+      <th>Reference</th>
     </tr>
     """
     template = Template("""
@@ -41,6 +42,7 @@ class Attack(Entry):
     <td class="name">{{ this.name() }}</td>
     <td class="complexity">{{ this.complexity() }}</td>
     <td class="quantum">{% if quantum %}yes{% else %}no{% endif %}</td>
+    <td class="reference">{{ this.reference() }}</td>
     </tr>
     """)
 
@@ -51,6 +53,11 @@ class Attack(Entry):
         return { 'poly': SecLvl.POLY,
                  'subexp': SecLvl.SUBEXP,
                  'exp': SecLvl.EXP }[self.props['complexity']]
+
+    def reference(self):
+        if self.props.get("reference"):
+            return f'<a class="reference-link" href="{self.props["reference"].get("url", "#")}">{self.props["reference"].get("slug", "link")}</a>'
+        return "-"
 
 class Trivial(Attack):
     def __init__(self):

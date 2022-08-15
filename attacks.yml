@@ -9,33 +9,51 @@ tani:
     long: Tani
   complexity: exp
   quantum: yes
+  reference:
+    slug: Tan07
+    url: "https://arxiv.org/abs/0708.2584"
 
 vow:
   name:
     short: vOW
     long: van Oorschot-Wiener
   complexity: exp
+  reference: 
+    slug: vOW99
+    url: "https://link.springer.com/article/10.1007/PL00003816"
   
 castryck-decru:
   name:
     long: Castryck-Decru
   complexity: poly
+  reference:
+    slug: CD22
+    url: "https://eprint.iacr.org/2022/975"
 
 maino-martindale:
   name:
     long: Maino-Martindale
   complexity: subexp
+  reference:
+    slug: MM22
+    url: "https://eprint.iacr.org/2022/1026"
     
 robert:
   name:
     long: Robert
   complexity: poly
+  reference:
+    slug: Rob22
+    url: "https://eprint.iacr.org/2022/1038"
 
 delfs-galbraith:
   name:
     short: DG
     long: Delfs-Galbraith
   complexity: exp
+  reference:
+    slug: DG13
+    url: "https://arxiv.org/abs/1310.7789"
     
 biasse-jao-sankar:
   name:
@@ -43,12 +61,18 @@ biasse-jao-sankar:
     long: Biasse-Jao-Sankar
   complexity: exp
   quantum: yes
+  reference:
+    slug: BJS14
+    url: "https://link.springer.com/chapter/10.1007/978-3-319-13039-2_25"
 
 kuperberg:
   name:
     long: Kuperberg
   complexity: subexp
   quantum: yes
+  reference:
+    slug: Kup04 
+    url: "https://arxiv.org/abs/quant-ph/0302112"
 
 galbraith:
   name:
