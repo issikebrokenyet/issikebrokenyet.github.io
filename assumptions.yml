@@ -64,7 +64,7 @@ parallelization-ss:
     long: Parallelization (supersingular case)
   aliases:
     - short: GA-CDH
-      long: Group Action Computational Diffie–Hellman
+      long: Group Action Computational Diffie-Hellman
   reduces_to:
     - vector-ss
 
@@ -83,6 +83,6 @@ vector-ss:
 gaddh-ss:
   name:
     short: GA-DDH (supersingular case)
-    long: Group Action Decisional Diffie–Hellman (supersingular case)
+    long: Group Action Decisional Diffie-Hellman (supersingular case)
   reduces_to:
     - parallelization-ss

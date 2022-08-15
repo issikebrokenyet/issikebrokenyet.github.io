@@ -1,7 +1,7 @@
 sidh:
   name:
     short: SIDH
-    long: Supersingular Isogeny Diffie–Hellman
+    long: Supersingular Isogeny Diffie-Hellman
   type: key exchange
   assumptions:
     - sidh
