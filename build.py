@@ -131,7 +131,7 @@ class Scheme(Entry):
     template = Template("""
     <tr id="{{ id }}">
     <td class="name">{{ this.name() }}</td>
-    <td class="type">{{ type }}</td>
+    <td class="type">{{ this.format_type() }}</td>
     <td class="c_sec complexity {{ this.security(False) }}">
     <a href="#{{ this.best_attack(False).props.id }}"
        title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
@@ -154,6 +154,13 @@ class Scheme(Entry):
 
     def security(self, quantum=True):
         return self.best_attack(quantum).complexity()
+
+    def format_type(self):
+        type_data = self.props['type']
+        if isinstance(type_data, list):
+            return ", ".join(type_data)
+        return type_data
+
     
 with open('attacks.yml') as att:
     with open('assumptions.yml') as ass:
