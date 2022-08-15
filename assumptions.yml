@@ -1,0 +1,88 @@
+cssi:
+  name:
+    short: CSSI
+    long: Computational Supersingular Isogeny Problem
+  attacks:
+    - mitm
+    - tani
+    - vow
+    - castryck-decru
+  reduces_to:
+    - cssi-random
+  comments: >-
+    Blabla
+
+cssi-random:
+  name:
+    long: CSSI with random starting curve
+  attacks:
+    - maino-martindale
+    - robert
+  reduces_to:
+    - ssendring
+
+sidh:
+  name:
+    short: SIDH
+    long: The SIDH problem
+  aliases:
+    - short: SSCDH
+      long: Supersingular Computational Diffie-Hellman Problem
+  reduces_to:
+    - cssi
+
+ssddh:
+  name:
+    short: SSDDH
+    long: Supersingular Decision Diffie-Hellman Problem
+  reduces_to:
+    - sidh
+
+ssisopath:
+  name:
+    long: The supersingular isogeny path problem
+  attacks:
+    - delfs-galbraith
+    - biasse-jao-sankar
+  reduces_to:
+    - ssendring
+
+ssendring:
+  name:
+    long: The supersingular endomorphism ring problem
+  reduces_to:
+    - ssisopath
+
+ssendringfp:
+  name:
+    long: The supersingular endomorphism ring problem for curves over GF(p)
+  reduces_to:
+    - ssendring
+
+parallelization-ss:
+  name:
+    long: Parallelization (supersingular case)
+  aliases:
+    - short: GA-CDH
+      long: Group Action Computational Diffie–Hellman
+  reduces_to:
+    - vector-ss
+
+vector-ss:
+  name:
+    long: Vectorization (supersingular case)
+  aliases:
+    - short: GAIP
+      long: Group Action Inverse Problem
+  attacks:
+    - kuperberg
+    - galbraith
+  reduces_to:
+    - ssendringfp
+
+gaddh-ss:
+  name:
+    short: GA-DDH (supersingular case)
+    long: Group Action Decisional Diffie–Hellman (supersingular case)
+  reduces_to:
+    - parallelization-ss

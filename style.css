@@ -1,0 +1,33 @@
+table {
+    border-collapse: collapse;
+}
+tr:nth-child(even) {
+    background-color: #eee;
+}
+td, th {
+    padding: 2px 4px;
+    border-left: solid thin gray;
+    border-right: solid thin gray;
+}
+td a {
+    color: inherit;
+}
+
+abbr[title=""] {
+    text-decoration: none;
+}
+
+.complexity-exp {
+    color: green;
+}
+.complexity-subexp {
+    color: orange;
+}
+.complexity-poly {
+    color: red;
+}
+
+footer {
+    margin-top: 1em;
+    text-align: center;
+}

@@ -1,0 +1,56 @@
+mitm:
+  name:
+    short: MITM
+    long: Meet in the Middle
+  complexity: exp
+    
+tani:
+  name:
+    long: Tani
+  complexity: exp
+  quantum: yes
+
+vow:
+  name:
+    short: vOW
+    long: van Oorschot–Wiener
+  complexity: exp
+  
+castryck-decru:
+  name:
+    long: Castryck–Decru
+  complexity: poly
+
+maino-martindale:
+  name:
+    long: Maino–Martindale
+  complexity: subexp
+    
+robert:
+  name:
+    long: Robert
+  complexity: poly
+
+delfs-galbraith:
+  name:
+    short: DG
+    long: Delfs–Galbraith
+  complexity: exp
+    
+biasse-jao-sankar:
+  name:
+    short: BJS
+    long: Biasse–Jao–Sankar
+  complexity: exp
+  quantum: yes
+
+kuperberg:
+  name:
+    long: Kuperberg
+  complexity: subexp
+  quantum: yes
+
+galbraith:
+  name:
+    long: Galbraith
+  complexity: exp
