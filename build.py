@@ -59,7 +59,7 @@ class Attack(Entry):
         reference_dict = self.props.get("references", {})
 
         for slug, url in reference_dict.items():
-            link = f'<a class="reference-link" href="{url}" target="_blank">[{slug}]</a>'
+            link = f'<a class="reference-link" href="{url}" target="_blank">{slug}</a>'
             links.append(link)
         if links:
             return " ".join(links)
