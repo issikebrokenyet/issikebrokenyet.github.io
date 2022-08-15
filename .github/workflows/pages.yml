@@ -29,10 +29,8 @@ jobs:
         with:
           python-version: '3.10' 
           cache: 'pip'
-      - run: pip install -r requirements.txt
-      - run: mkdir _site
-      - run: cp style.css _site/
-      - run: python build.py > _site/index.html
+      - run: pip install -r src/requirements.txt
+      - run: python src/build.py > _site/index.html
       - uses: actions/upload-pages-artifact@v1
         with:
           path: '_site'
