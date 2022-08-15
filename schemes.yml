@@ -2,7 +2,7 @@ sidh:
   name:
     short: SIDH
     long: Supersingular Isogeny Diffie-Hellman
-  type: key exchange
+  type: Key Exchange
   assumptions:
     - sidh
 
@@ -17,14 +17,14 @@ sike:
 sidh-random:
   name:
     long: SIDH with random starting curve
-  type: key exchange
+  type: Key Exchange
   assumptions:
     - cssi-random
 
 sidh-prewalk:
   name:
     long: SIDH with initial secret walk
-  type: key exchange
+  type: Key Exchange
   assumptions:
     - cssi-random
 
@@ -32,7 +32,7 @@ csidh:
   name:
     short: CSIDH
   type:
-    - key exchange
-    - non interactive key exchange
+    - Key Exchange
+    - Non Interactive Key Exchange
   assumptions:
     - parallelization-ss
