@@ -25,6 +25,17 @@ class Entry:
             return f'<abbr title="{ self.props["name"]["long"] }">{ self.props["name"]["short"] }</abbr>'
         else:
             return self.props['name'].get('short') or self.props['name'].get('long')
+
+    def reference(self):
+        links = []
+        reference_dict = self.props.get("references", {})
+
+        for slug, url in reference_dict.items():
+            link = f'<a class="reference-link" href="{url}" target="_blank">{slug}</a>'
+            links.append(link)
+        if links:
+            return " ".join(links)
+        return "-" 
     
 class Attack(Entry):
     header = """
@@ -54,17 +65,6 @@ class Attack(Entry):
                  'subexp': SecLvl.SUBEXP,
                  'exp': SecLvl.EXP }[self.props['complexity']]
 
-    def reference(self):
-        links = []
-        reference_dict = self.props.get("references", {})
-
-        for slug, url in reference_dict.items():
-            link = f'<a class="reference-link" href="{url}" target="_blank">{slug}</a>'
-            links.append(link)
-        if links:
-            return " ".join(links)
-        return "-" 
-
 class Trivial(Attack):
     def __init__(self):
         self.id = 'trivial'
@@ -79,6 +79,7 @@ class Assumption(Entry):
       <th>Name</th>
       <th>Classical Security</th>
       <th>Quantum Security</th>
+      <th>Reference</th>
     </tr>
     """
     template = Template("""
@@ -92,6 +93,7 @@ class Assumption(Entry):
     <a href="#{{ this.best_attack().props.id }}"
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
+    <td class="reference">{{ this.reference() }}</td>
     </tr>
     """)
 
@@ -132,6 +134,7 @@ class Scheme(Entry):
       <th>Type</th>
       <th>Classical Security</th>
       <th>Quantum Security</th>
+      <th>Reference</th>
     </tr>
     """
     template = Template("""
@@ -146,6 +149,7 @@ class Scheme(Entry):
     <a href="#{{ this.best_attack().props.id }}"
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
+    <td class="reference">{{ this.reference() }}</td>
     </tr>
     """)
 
