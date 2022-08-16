@@ -8,6 +8,8 @@ sidh:
   references:
     JDF11: 'https://doi.org/10.1007/978-3-642-25405-5_2'
     DJP14: 'https://eprint.iacr.org/2011/506'
+  comment: >-
+    Fun fact: [JDF11] does not give a name to the scheme.
 
 sike:
   name:

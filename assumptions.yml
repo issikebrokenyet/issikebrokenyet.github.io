@@ -11,8 +11,10 @@ cssi:
     - cssi-random
   references:
     JDF11: 'https://doi.org/10.1007/978-3-642-25405-5_2'
-  comments: >-
-    Blabla
+  comment: >-
+    The name CSSI, introduced in [JDF11] is a bit of a misnomer:
+    despite the generic sounding name, it is a very specific problem
+    related to the security of SIDH.
 
 cssi-random:
   name:
