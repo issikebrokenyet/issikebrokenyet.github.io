@@ -3,6 +3,7 @@
 }
 
 :root{
+    --background: white;
     --red: #cf222e;
     --orange: #ffa700;
     --green: #2da44e;
@@ -41,14 +42,20 @@ a:visited{
 table {
     border-collapse: collapse;
     margin-bottom: 3em;
-    /*line-height: 1;*/
+    width: -moz-available;
 }
 th{
     text-align: left;
 }
-tr:nth-child(even) {
+
+tr:nth-child(4n+3),
+tr:nth-child(4n+4){
     background-color: var(--highlight);
 }
+tr.header-row{
+    background-color: var(--background);
+}
+
 th, td {
     padding: 13px 15px 11px 15px;
     border: solid 1px var(--cell-border);
@@ -59,6 +66,10 @@ td a {
 
 abbr[title=""] {
     text-decoration: none;
+}
+
+.hidden-row{
+    display: none;
 }
 
 .complexity.exp {
