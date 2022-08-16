@@ -1,6 +1,8 @@
 import yaml
 from enum import IntEnum
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
+import markdown
+import re
 
 class SecLvl(IntEnum):
     POLY = 0
@@ -42,11 +44,24 @@ class Entry:
             return f'<input type="checkbox" name="comment-checkbox" id="comment-{self.props["id"]}-checkbox">'
         return "-"
 
+    def reference_in_comment(self, comment):
+        # Collect the element's references
+        ref_dict = self.props.get("references", {})
+        comment_references = re.findall(r"\[(.*?)\]", comment)
+        # I don't want recursive replacement, so focus on unique
+        # matches...
+        comment_references = list(set(comment_references))
+        for ref in comment_references:
+            if ref in ref_dict:
+                anchor = f'<a class="reference-link" href="{ref_dict[ref]}" target="_blank">[{ref}]</a>'
+                comment = comment.replace(f"[{ref}]", anchor)
+        return comment
+
     def comment(self):
-        """
-        TODO: parse comment for references and convert to links
-        """
-        return self.props.get("comment", "")
+        comment_markdown = self.props.get("comment", "").rstrip()
+        comment_html =  markdown.markdown(comment_markdown, 
+                                 extensions=["nl2br"])
+        return self.reference_in_comment(comment_html)
     
 class Attack(Entry):
     header = """
