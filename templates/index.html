@@ -54,4 +54,19 @@
       <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
     </footer>
   </body>
+
+  <script>
+    // Select all checkboxes with the name 'settings' using querySelectorAll.
+    var checkboxes = document.querySelectorAll("input[type=checkbox][name=comment-checkbox]");
+
+    // Use Array.forEach to add an event listener to each checkbox.
+    checkboxes.forEach(function(checkbox) {
+      checkbox.addEventListener('change', function() {
+        const checkbox_id = this.id;
+        const comment_id = checkbox_id.replace("-checkbox", "");
+        const comment_ele = document.getElementById(comment_id);
+        comment_ele.classList.toggle("hidden-row");
+      })
+    });
+  </script>
 </html>
