@@ -12,6 +12,7 @@
     --link-visited: #8250df;
     --highlight: #f6f8fa;
     --cell-border: #d0d7de;
+    --comment-background: #e8ffe9;
 }
 
 html{
@@ -67,6 +68,15 @@ td a {
 
 abbr[title=""] {
     text-decoration: none;
+}
+
+.comment-cell{
+    line-height: 1.6em;
+    padding-bottom: 2rem;
+    background-color: var(--comment-background);
+}
+.comment-cell h4{
+    margin: 1rem 0;
 }
 
 .hidden-row{

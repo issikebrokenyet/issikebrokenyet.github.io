@@ -69,7 +69,7 @@ class Attack(Entry):
     <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
     </tr>
     <tr id="comment-{{ id }}" class="hidden-row">
-        <td colspan="5"><b>Comment</b><br><br>{{this.comment()}}</td>
+        <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     """)
 
@@ -114,7 +114,7 @@ class Assumption(Entry):
     <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
     </tr>
     <tr id="comment-{{ id }}" class="hidden-row">
-        <td colspan="5"><b>Comment</b><br><br>{{this.comment()}}</td>
+        <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     """)
 
@@ -175,7 +175,7 @@ class Scheme(Entry):
     <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
     </tr>
     <tr id="comment-{{ id }}" class="hidden-row">
-        <td colspan="6"><b>Comment</b><br><br>{{this.comment()}}</td>
+        <td colspan="6" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     """)
 
