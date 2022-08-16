@@ -163,8 +163,9 @@ technologies, if you want to suggest improvements, but we want to keep
 it simple.
 
 The build scripts are in [`src/`](src/), the static files are in
-[`_site/`](_site/).  The easiest way to setup the environment and to
-build the site is by using `make`.
+[`_site/`](_site/) and the HTML templates in
+[`templates/`](templates/).  The easiest way to setup the environment
+and to build the site is by using `make`.
 
 ```
 # Setup the Python virtual environment

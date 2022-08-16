@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Is SIKE broken yet?</title>
+    <meta name="description"
+          content="A knowledge base of most isogeny based cryptosystems and the best attacks on them." />
+    <link rel="stylesheet" href="style.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+	  tex2jax: {inlineMath: [['$','$']]}
+      });
+    </script>
+    <script type="text/javascript" async
+	    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+  </head>
+  <body>
+    <h1>Is SIKE broken yet?</h1>
+    <h2 id="schemes">Schemes</h2>
+    <table>
+      <thead>{{ schemes_head | safe }}</thead>
+      <tbody>{{ schemes | safe }}</tbody>
+    </table>
+    <h2 id="assumptions">Assumptions</h2>
+    <table>
+      <thead>{{ assumptions_head | safe }}</thead>
+      <tbody>{{ assumptions | safe }}</tbody>
+    </table>
+    <h2 id="attacks">Attacks</h2>
+    <table>
+      <thead>{{ attacks_head | safe }}</thead>
+      <tbody>{{ attacks | safe }}</tbody>
+    </table>
+    <footer>
+      <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
+    </footer>
+  </body>
+</html>

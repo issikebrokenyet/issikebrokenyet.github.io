@@ -1,6 +1,6 @@
 import yaml
 from enum import IntEnum
-from jinja2 import Template
+from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
 
 class SecLvl(IntEnum):
     POLY = 0
@@ -183,62 +183,16 @@ with open('attacks.yml') as att:
             for s in schemes.values():
                 s.link(assumptions)
 
-
-print("""<!DOCTYPE html>
-<html>
-<head>
-  <title>Is SIKE broken yet?</title>
-  <meta name="description"
-        content="A knowledge base of most isogeny based cryptosystem and the best attacks on them." />
-  <link rel="stylesheet" href="style.css" />
-
-  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {inlineMath: [['$','$']]}
-  });
-  </script>
-  <script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-</head>
-<body>
-  <h1>Is SIKE broken yet?</h1>
-  <h2 id="schemes">Schemes</h2>
-  <table>
-  <thead>
-  %s
-  </thead>
-  <tbody>
-  %s
-  </tbody>
-  </table>
-  <h2 id="assumptions">Assumptions</h2>
-  <table>
-  <thead>
-  %s
-  </thead>
-  <tbody>
-  %s
-  </tbody>
-  </table>
-  <h2 id="attacks">Attacks</h2>
-  <table>
-  <thead>
-  %s
-  </thead>
-  <tbody>
-  %s
-  </tbody>
-  </table>
-  <footer>
-    <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
-  </footer>
-</body>
-</html>""" % (
-                Scheme.header,
-                "\n".join(repr(a) for a in schemes.values()),
-                Assumption.header,
-                "\n".join(repr(a) for a in assumptions.values()),
-                Attack.header,
-                "\n".join(repr(a) for a in attacks.values())
+            env = Environment(
+                loader = FileSystemLoader("templates"),
+                autoescape=select_autoescape()
+            )
+            index = env.get_template("index.html")
+            print(index.render(
+                schemes_head=Scheme.header,
+                schemes="\n".join(repr(a) for a in schemes.values()),
+                assumptions_head=Assumption.header,
+                assumptions="\n".join(repr(a) for a in assumptions.values()),
+                attacks_head=Attack.header,
+                attacks="\n".join(repr(a) for a in attacks.values())
             ))
