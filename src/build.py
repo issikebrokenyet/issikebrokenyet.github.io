@@ -35,15 +35,27 @@ class Entry:
             links.append(link)
         if links:
             return " ".join(links)
-        return "-" 
+        return "-"
+
+    def comment_checkbox(self):
+        if self.props.get("comment"):
+            return f'<input type="checkbox" name="comment-checkbox" id="comment-{self.props["id"]}-checkbox">'
+        return "-"
+
+    def comment(self):
+        """
+        TODO: parse comment for references and convert to links
+        """
+        return self.props.get("comment", "")
     
 class Attack(Entry):
     header = """
-    <tr>
+    <tr class="header-row">
       <th>Name</th>
       <th>Complexity</th>
       <th>Quantum?</th>
       <th>Reference</th>
+      <th>Comment</th>
     </tr>
     """
     template = Template("""
@@ -54,6 +66,10 @@ class Attack(Entry):
     <td class="complexity {{ complexity }}">{{ this.complexity() }}</td>
     <td class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</td>
     <td class="reference">{{ this.reference() }}</td>
+    <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
+    </tr>
+    <tr id="comment-{{ id }}" class="hidden-row">
+        <td colspan="5"><b>Comment</b><br><br>{{this.comment()}}</td>
     </tr>
     """)
 
@@ -80,6 +96,7 @@ class Assumption(Entry):
       <th>Classical Security</th>
       <th>Quantum Security</th>
       <th>Reference</th>
+      <th>Comment</th>
     </tr>
     """
     template = Template("""
@@ -94,6 +111,10 @@ class Assumption(Entry):
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
     <td class="reference">{{ this.reference() }}</td>
+    <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
+    </tr>
+    <tr id="comment-{{ id }}" class="hidden-row">
+        <td colspan="5"><b>Comment</b><br><br>{{this.comment()}}</td>
     </tr>
     """)
 
@@ -135,6 +156,7 @@ class Scheme(Entry):
       <th>Classical Security</th>
       <th>Quantum Security</th>
       <th>Reference</th>
+      <th>Comment</th>
     </tr>
     """
     template = Template("""
@@ -150,6 +172,10 @@ class Scheme(Entry):
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
     <td class="reference">{{ this.reference() }}</td>
+    <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
+    </tr>
+    <tr id="comment-{{ id }}" class="hidden-row">
+        <td colspan="6"><b>Comment</b><br><br>{{this.comment()}}</td>
     </tr>
     """)
 
