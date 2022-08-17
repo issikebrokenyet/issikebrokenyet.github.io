@@ -8,6 +8,7 @@
     --link-visited: #8250df;
     --highlight: #f6f8fa;
     --cell-border: #d0d7de;
+    --target-highlight: #c2deef;
     --comment-background: #e8ffe9;
 }
 
@@ -60,6 +61,9 @@ tr:nth-child(4n+4){
 }
 tr.header-row{
     background-color: var(--background);
+}
+tr:target {
+    background-color: var(--target-highlight);
 }
 
 th, td {
