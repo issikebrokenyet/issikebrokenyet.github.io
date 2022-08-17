@@ -9,17 +9,27 @@ cssi:
     - castryck-decru
   reduces_to:
     - cssi-random
-  comments: >-
-    Blabla
+  references:
+    JDF11: 'https://doi.org/10.1007/978-3-642-25405-5_2'
+  comment: >-
+    The problem of computing an isogeny of known degree given its
+    action on a torsion subgroup of order coprime to the degree, as
+    introduce in [JDF11] to claim security of SIDH.
 
 cssi-random:
   name:
     long: CSSI with random starting curve
   attacks:
-    - maino-martindale
+    - castryck-decru-maino-martindale
     - robert
   reduces_to:
     - ssendring
+  references:
+    Pet17: 'https://eprint.iacr.org/2017/571'
+  comment: >-
+    Same problem as CSSI, but the starting curve is random and the
+    endomorphism ring is unknown to the attacker.  Folklore, first
+    mentioned in [Pet17].
 
 sidh:
   name:
@@ -30,6 +40,10 @@ sidh:
       long: Supersingular Computational Diffie-Hellman Problem
   reduces_to:
     - cssi
+  references:
+    JDF11: 'https://doi.org/10.1007/978-3-642-25405-5_2'
+  comment: >-
+    The analogue of CDH for SIDH.
 
 ssddh:
   name:
@@ -37,6 +51,10 @@ ssddh:
     long: Supersingular Decision Diffie-Hellman Problem
   reduces_to:
     - sidh
+  references:
+    JDF11: 'https://doi.org/10.1007/978-3-642-25405-5_2'
+  comment: >-
+    The analogue of DDH for SIDH.
 
 ssisopath:
   name:
@@ -46,18 +64,40 @@ ssisopath:
     - biasse-jao-sankar
   reduces_to:
     - ssendring
+  references:
+    CGL06: 'https://eprint.iacr.org/2006/021'
+    Wes21: 'https://eprint.iacr.org/2021/919'
+  comment: >-
+    Given two random supersingular curves, the problem of finding an
+    isogeny walk between them. In some versions of the problem, one of
+    the two curves is fixed. First considered in [CGL06]. Proven
+    equivalent to the Endomorphism ring problem in [Wes21].
 
 ssendring:
   name:
     long: The supersingular endomorphism ring problem
   reduces_to:
     - ssisopath
+  references:
+    Koh96: 'http://iml.univ-mrs.fr/~kohel/pub/thesis.pdf'
+    Cer04: 'https://arxiv.org/pdf/math/0404538'
+    Wes21: 'https://eprint.iacr.org/2021/919'
+  comment: >-
+    Given a random supersingular curve, the problem of computing its
+    endomorphism ring. First algorithms proposed in [Koh96]. Proven
+    equivalent to the Isogeny path problem in [Wes21].
 
 ssendringfp:
   name:
     long: The supersingular endomorphism ring problem for curves over GF(p)
   reduces_to:
     - ssendring
+    - vector-ss
+  references:
+    Wes21: 'https://eprint.iacr.org/2021/1583'
+  comment: >-
+    Same as the supersingular endomorphism ring problem, but for
+    random curves over a prime field $\mathbb{F}_p$.
 
 parallelization-ss:
   name:
@@ -67,6 +107,11 @@ parallelization-ss:
       long: Group Action Computational Diffie-Hellman
   reduces_to:
     - vector-ss
+  references:
+    Cou06: 'https://eprint.iacr.org/2006/291'
+    CD19: 'https://eprint.iacr.org/2019/1404'
+  comment:
+    The anaologue of CDH for CSIDH.
 
 vector-ss:
   name:
@@ -79,6 +124,19 @@ vector-ss:
     - galbraith
   reduces_to:
     - ssendringfp
+  references:
+    Cou06: 'https://eprint.iacr.org/2006/291'
+    Sto10: 'http://dx.doi.org/10.3934/amc.2010.4.215'
+    CD19: 'https://eprint.iacr.org/2019/1404'
+    CPV19: 'https://eprint.iacr.org/2019/1202'
+    Wes21: 'https://eprint.iacr.org/2021/1583'
+  comment: >-
+    Given two random supersingular curves over $\mathbb{F}_p$, find an
+    isogeny of smooth degree between them. By random
+    self-reducibility, this is equivalent to the problem where one of
+    the two curves is fixed. The reduction to the Endomorphism ring
+    problem over $\mathbb{F}_p$ was done in several steps in [CPV19],
+    [Wes21].
 
 gaddh-ss:
   name:
@@ -86,3 +144,65 @@ gaddh-ss:
     long: Group Action Decisional Diffie-Hellman (supersingular case)
   reduces_to:
     - parallelization-ss
+  references:
+    Sto10: 'http://dx.doi.org/10.3934/amc.2010.4.215'
+    CD19: 'https://eprint.iacr.org/2019/1404'
+  comment:
+    The anaologue of DDH for CSIDH.
+
+vector:
+  name:
+    long: Vectorization (ordinary case)
+  aliases:
+    - short: GAIP
+      long: Group Action Inverse Problem
+  attacks:
+    - kuperberg
+    - galbraith
+  references:
+    Cou06: 'https://eprint.iacr.org/2006/291'
+    Sto10: 'http://dx.doi.org/10.3934/amc.2010.4.215'
+  comment: >-
+    Given two random isogenous ordinary curves with isomorphic
+    endomorphism rings, find an isogeny of smooth degree between
+    them. By random self-reducibility, this is equivalent to the
+    problem where one of the two curves is fixed.
+
+parallelization:
+  name:
+    long: Parallelization (ordinary case)
+  aliases:
+    - short: GA-CDH
+      long: Group Action Computational Diffie-Hellman
+  reduces_to:
+    - vector
+  references:
+    Cou06: 'https://eprint.iacr.org/2006/291'
+  comment:
+    The anaologue of CDH for CRS.
+
+cssi-bsidh:
+  name:
+    short: CSSI (B-SIDH)
+  attacks:
+    - mitm
+    - tani
+    - vow
+    - castryck-decru
+  reduces_to:
+    - ssendring
+  references:
+    Cos19: 'https://eprint.iacr.org/2019/1145'
+  comment: >-
+    The analogue of the CSSI problem for B-SIDH.
+
+bsidh:
+  name:
+    short: B-SIDH
+    long: The B-SIDH problem
+  reduces_to:
+    - cssi-bsidh
+  references:
+    Cos19: 'https://eprint.iacr.org/2019/1145'
+  comment: >-
+    The analogue of the SIDH problem for B-SIDH.

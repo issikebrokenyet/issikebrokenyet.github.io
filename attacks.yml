@@ -3,6 +3,11 @@ mitm:
     short: MITM
     long: Meet in the Middle
   complexity: exp
+  references:
+    JDF11: 'https://doi.org/10.1007/978-3-642-25405-5_2'
+  comment: >-
+    Useful to find isogeny walks of unusually short length, such as in
+    SIDH.
     
 tani:
   name:
@@ -11,6 +16,9 @@ tani:
   quantum: yes
   references:
     Tan07: "https://arxiv.org/abs/0708.2584"
+  comment: >-
+    Claw finding quantum algorithm. Useful to find isogeny walks of
+    unusually short length, such as in SIDH.
 
 vow:
   name:
@@ -19,6 +27,9 @@ vow:
   complexity: exp
   references: 
     vOW99: "https://link.springer.com/article/10.1007/PL00003816"
+    AC+18: 'https://eprint.iacr.org/2018/313'
+  comment: >-
+    Memory efficient version of MITM.
   
 castryck-decru:
   name:
@@ -26,13 +37,20 @@ castryck-decru:
   complexity: poly
   references:
     CD22: "https://eprint.iacr.org/2022/975"
+  comment: >-
+    Solves the isogeny problem with torsion point information (CSSI),
+    assuming the endomorphism ring of the starting curve is special.
 
-maino-martindale:
+castryck-decru-maino-martindale:
   name:
-    long: Maino-Martindale
+    short: CDMM
+    long: Castryck-Decru-Maino-Martindale
   complexity: subexp
   references:
+    CD22: "https://eprint.iacr.org/2022/975"
     MM22: "https://eprint.iacr.org/2022/1026"
+  comment: >-
+    $L(1/2)$ version of Castryck-Decru for arbitrary starting curve.
     
 robert:
   name:
@@ -40,15 +58,10 @@ robert:
   complexity: poly
   references:
     Rob22: "https://eprint.iacr.org/2022/1038"
+  comment: >-
+    Polynomial-time generalization of Castryck-Decru for arbitrary
+    starting curve.
 
-delfs-galbraith:
-  name:
-    short: DG
-    long: Delfs-Galbraith
-  complexity: exp
-  references:
-    DG13: "https://arxiv.org/abs/1310.7789"
-    
 biasse-jao-sankar:
   name:
     short: BJS
@@ -57,7 +70,21 @@ biasse-jao-sankar:
   quantum: yes
   references:
     BJS14: "https://link.springer.com/chapter/10.1007/978-3-319-13039-2_25"
+  comment: >-
+    Quantum version of Delfs-Galbraith.
 
+delfs-galbraith:
+  name:
+    short: DG
+    long: Delfs-Galbraith
+  complexity: exp
+  references:
+    DG13: "https://arxiv.org/abs/1310.7789"
+  comment: >-
+    $\exp(1/4)$ reduction of the supersingular isogeny path problem to
+    the vectorization problem for supsersingular curves over
+    $\mathbb{F}_p$.
+    
 kuperberg:
   name:
     long: Kuperberg
@@ -76,3 +103,9 @@ galbraith:
   name:
     long: Galbraith
   complexity: exp
+  references:
+    Gal99: 'https://doi.org/10.1112/S1461157000000097'
+    GHS01: 'https://eprint.iacr.org/2001/054'
+  comment: >-
+    Random walk based algorithm to find an isogeny path between
+    curves. [GHS01] is a more memory efficient version of [Gal99].
