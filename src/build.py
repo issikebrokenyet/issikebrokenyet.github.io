@@ -39,9 +39,9 @@ class Entry:
             return " ".join(links)
         return "-"
 
-    def comment_checkbox(self):
+    def comment_checkbox(self, table):
         if self.props.get("comment"):
-            return f'<input type="checkbox" name="comment-checkbox" id="comment-{self.props["id"]}-checkbox">'
+            return f'<input type="checkbox" name="comment-checkbox" id="comment-{table}-{self.props["id"]}-checkbox">'
         return "-"
 
     def reference_in_comment(self, comment):
@@ -81,9 +81,9 @@ class Attack(Entry):
     <td class="complexity {{ complexity }}">{{ this.complexity() }}</td>
     <td class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</td>
     <td class="reference">{{ this.reference() }}</td>
-    <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
+    <td class="comment-checkbox">{{ this.comment_checkbox("attack") }}</td>
     </tr>
-    <tr id="comment-{{ id }}" class="hidden-row">
+    <tr id="comment-attack-{{ id }}" class="hidden-row">
         <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     """)
@@ -126,9 +126,9 @@ class Assumption(Entry):
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
     <td class="reference">{{ this.reference() }}</td>
-    <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
+    <td class="comment-checkbox">{{ this.comment_checkbox("assumption") }}</td>
     </tr>
-    <tr id="comment-{{ id }}" class="hidden-row">
+    <tr id="comment-assumption-{{ id }}" class="hidden-row">
         <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     """)
@@ -187,9 +187,9 @@ class Scheme(Entry):
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
     <td class="reference">{{ this.reference() }}</td>
-    <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
+    <td class="comment-checkbox">{{ this.comment_checkbox("scheme") }}</td>
     </tr>
-    <tr id="comment-{{ id }}" class="hidden-row">
+    <tr id="comment-scheme-{{ id }}" class="hidden-row">
         <td colspan="6" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     """)
