@@ -70,6 +70,12 @@ td a {
     color: inherit;
 }
 
+abbr[title] {
+  position: relative;
+  /* ensure consistent styling across browsers */
+  text-decoration: underline dotted; 
+}
+
 abbr[title=""] {
     text-decoration: none;
 }
@@ -111,4 +117,50 @@ a.reference-link:visited{
 footer {
     margin: 2em 0;
     text-align: center;
+}
+
+
+/* Mobile devices */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 900px) { 
+
+    body{
+        min-width: 0;
+    }
+
+    .table-div{
+        overflow: hidden;
+        width: calc(100%);
+        overflow-x: scroll;
+    }
+
+    abbr[title]:hover::after,
+    abbr[title]:focus::after {
+        content: attr(title);
+
+        /* position tooltip like the native one */
+        position: absolute;
+        left: 0;
+        bottom: -30px;
+        width: auto;
+        white-space: nowrap;
+
+        /* style tooltip */
+        background-color: var(--highlight);
+        color: var(--text);
+        border-radius: 3px;
+        box-shadow: 1px 1px 5px 0 rgba(0,0,0,0.2);
+        font-size: 15px;
+        padding: 3px 5px;
+    }
+
+    abbr[title=""] {
+        text-decoration: none;
+    }
+
+    .comment-cell{
+        padding-right: calc(100% - 100vw + 3em);
+    }
+
 }

@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Is SIKE broken yet?</title>
     <meta name="description"
@@ -51,20 +52,26 @@
   <body>
     <h1>Is SIKE broken yet?</h1>
     <h2 id="schemes">Schemes</h2>
-    <table>
-      <thead>{{ schemes_head | safe }}</thead>
-      <tbody>{{ schemes | safe }}</tbody>
-    </table>
+    <div class="table-div">
+      <table>
+        <thead>{{ schemes_head | safe }}</thead>
+        <tbody>{{ schemes | safe }}</tbody>
+      </table>
+    </div>
     <h2 id="assumptions">Assumptions</h2>
-    <table>
-      <thead>{{ assumptions_head | safe }}</thead>
-      <tbody>{{ assumptions | safe }}</tbody>
-    </table>
+    <div class="table-div">
+      <table>
+        <thead>{{ assumptions_head | safe }}</thead>
+        <tbody>{{ assumptions | safe }}</tbody>
+      </table>
+    </div>
     <h2 id="attacks">Attacks</h2>
-    <table>
-      <thead>{{ attacks_head | safe }}</thead>
-      <tbody>{{ attacks | safe }}</tbody>
-    </table>
+    <div class="table-div">
+      <table>
+        <thead>{{ attacks_head | safe }}</thead>
+        <tbody>{{ attacks | safe }}</tbody>
+      </table>
+    </div>
     <footer>
       <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
     </footer>
