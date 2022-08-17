@@ -8,8 +8,13 @@ sidh:
   references:
     JDF11: 'https://doi.org/10.1007/978-3-642-25405-5_2'
     DJP14: 'https://eprint.iacr.org/2011/506'
+    CLN16: 'https://eprint.iacr.org/2016/413'
   comment: >-
-    Fun fact: [JDF11] does not give a name to the scheme.
+    [JDF11] explored using isogenies of degree $ℓ^e$ for various
+    choices of $\ell$. It is only with [DJP14] that the choice of
+    $ℓ=2,3$ became standard. The choice of having $p = 3 \bmod 4$ and
+    of a specific starting curve did not become standard until
+    [CLN16].
 
 sike:
   name:
@@ -18,6 +23,11 @@ sike:
   type: KEM
   assumptions:
     - sidh
+  references:
+    SIKE: 'https://sike.org/'
+  comment: >-
+    Candidate to the NIST Post-Quantum Standardization process until
+    the 4th round.
 
 sidh-random:
   name:
@@ -25,6 +35,14 @@ sidh-random:
   type: Key Exchange
   assumptions:
     - cssi-random
+  references:
+    Pet17: 'https://eprint.iacr.org/2017/571'
+    BB+22: 'https://eprint.iacr.org/2022/518'
+  comment: >-
+    Folklore version SIDH, starting from a random curve of unknown
+    endomorphism ring.  First published mention in [Pet17], however it
+    is currently not known how to generate such a curve without a
+    trusted setup (see [BB+22]).
 
 sidh-prewalk:
   name:
@@ -32,6 +50,48 @@ sidh-prewalk:
   type: Key Exchange
   assumptions:
     - cssi-random
+  references:
+    Pet17: 'https://eprint.iacr.org/2017/571'
+    BdQ+19: 'https://eprint.iacr.org/2019/1333'
+    Cos21: 'https://eprint.iacr.org/2021/543'
+  comment: >-
+    Folklore version of SIDH where the initiator (Alice) selects a
+    random starting curve before starting the key exchange.  First
+    published mention in [BdQ+19], Section 11.1, as a possible
+    countermeasure against torsion point attacks (see [Pet17]).  Also
+    mentioned in [Cos21] for the same reason.
+
+bsidh:
+  name:
+    short: B-SIDH
+  type: Key Exchange
+  assumptions:
+    - bsidh
+  references:
+    Cos19: 'https://eprint.iacr.org/2019/1145'
+  comment: >-
+    Variant of SIDH exploiting torsion points both on the curve and
+    its twist.
+
+crs:
+  name:
+    short: CRS
+    long: Couveignes-Rostovtsev-Stolbunov
+  type:
+    - Key Exchange
+    - Non Interactive Key Exchange
+  assumptions:
+    - parallelization
+  references:
+    Cou06: 'https://eprint.iacr.org/2006/291'
+    RS06: 'https://eprint.iacr.org/2006/145'
+    DKS18: 'https://eprint.iacr.org/2018/485'
+  comment: >-
+    Ancestor of CSIDH based on the theory of complex multiplication on
+    ordinary curves defined over finite fields.  Initially discovered
+    by Couveignes in '97 [Cou06], was left unpublished and was
+    independently rediscovered by [RS06].  [DKS18] introduce tweaks to
+    the parameters to improve performance.
 
 csidh:
   name:
@@ -41,3 +101,26 @@ csidh:
     - Non Interactive Key Exchange
   assumptions:
     - parallelization-ss
+  references:
+    CL+18: 'https://eprint.iacr.org/2018/383'
+    CD19: 'https://eprint.iacr.org/2019/1404'
+  comment: >-
+    Variant of CRS based on the action of $\mathrm{Cl}(\sqrt{-p})$ on
+    supersingular curves defined over $\mathbb{F}_p$.  Original
+    proposal with $p = 3 \bmod 8$ in [CL+18], minor variant wiht $p =
+    7 \bmod 8$ in [CD19].
+
+# osidh:
+#   name:
+#     short: OSIDH
+#     long: Oriented SIDH
+#   type:
+#     - Key Exchange
+#     - Non Interactive Key Exchange
+#   assumptions:
+#     - parallelization-osidh
+#   references:
+#     CK20: 'https://eprint.iacr.org/2020/985'
+#   comment: >-
+#     Variant of CRS/CSIDH based on the action of a class group on a set
+#     of supersingular curves reached by "volcano descent".

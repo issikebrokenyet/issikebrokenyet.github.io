@@ -66,7 +66,7 @@ sidh:
 
   # A Markdown field for extra comments. 
   # References in brackets are automatically expanded to links.
-  comments: >-
+  comment: >-
     Fun fact: [JDF11] does not give a name to the scheme.
 ```
 
@@ -112,7 +112,7 @@ cssi:
 
   # A Markdown field for extra comments. 
   # References in brackets are automatically expanded to links.
-  comments: >-
+  comment: >-
     The name CSSI, introduced in [JDF11] is a bit of a misnomer:
     despite the generic sounding name, it is a very specific problem
     related to the security of SIDH.
