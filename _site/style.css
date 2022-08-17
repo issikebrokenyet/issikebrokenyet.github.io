@@ -77,6 +77,7 @@ abbr[title=""] {
 .comment-cell{
     line-height: 1.6em;
     background-color: var(--comment-background);
+    -webkit-text-size-adjust: none
 }
 .comment-cell h4{
     margin: 1rem 0;
