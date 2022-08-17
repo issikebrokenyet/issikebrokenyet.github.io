@@ -74,7 +74,7 @@ class Attack(Entry):
     </tr>
     """
     template = Template("""
-    <tr id="{{ id }}"
+    <tr id="attack-{{ id }}"
         class="quantum-{{ quantum | default(false) }}
         complexity">
     <td class="name">{{ this.name() }}</td>
@@ -115,14 +115,14 @@ class Assumption(Entry):
     </tr>
     """
     template = Template("""
-    <tr id="{{ id }}">
+    <tr id="assumption-{{ id }}">
     <td class="name">{{ this.name() }}</td>
     <td class="c_sec complexity {{ this.security(False) }}">
-    <a href="#{{ this.best_attack(False).props.id }}"
+    <a href="#attack-{{ this.best_attack(False).props.id }}"
        title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
     </td>
     <td class="q_sec complexity {{ this.security() }}">
-    <a href="#{{ this.best_attack().props.id }}"
+    <a href="#attack-{{ this.best_attack().props.id }}"
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
     <td class="reference">{{ this.reference() }}</td>
@@ -175,15 +175,15 @@ class Scheme(Entry):
     </tr>
     """
     template = Template("""
-    <tr id="{{ id }}">
+    <tr id="scheme-{{ id }}">
     <td class="name">{{ this.name() }}</td>
     <td class="type">{{ this.format_type() }}</td>
     <td class="c_sec complexity {{ this.security(False) }}">
-    <a href="#{{ this.best_attack(False).props.id }}"
+    <a href="#attack-{{ this.best_attack(False).props.id }}"
        title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
     </td>
     <td class="q_sec complexity {{ this.security() }}">
-    <a href="#{{ this.best_attack().props.id }}"
+    <a href="#attack-{{ this.best_attack().props.id }}"
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
     <td class="reference">{{ this.reference() }}</td>
