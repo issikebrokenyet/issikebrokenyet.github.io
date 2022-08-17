@@ -1,17 +1,61 @@
 import yaml
-from enum import IntEnum
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
+from fractions import Fraction
 import markdown
 import re
 
-class SecLvl(IntEnum):
-    POLY = 0
-    SUBEXP = 1
-    EXP = 2
-    UNB = 10
+class L:
+    '''
+    Complexity function L(a,c) = exp( (c+o(1)) (log n)^a (loglog n)^(1-a) )
+    '''
+    def __init__(self, a, c=None):
+        self.a = Fraction(a)
+        self.c = Fraction(c) if c is not None else float('inf')
 
+    @classmethod
+    def parse(cls, str):
+        m = re.match(r'poly(\(([\d/]+)\))?$', str)
+        if m:
+            return cls(0, m.group(2))
+        m = re.match(r'L\(([\d/]+)(,([\d/]+))?\)$', str)
+        if m:
+            return cls(m.group(1), m.group(3))
+        m = re.match(r'exp(\(([\d/]+)\))?$', str)
+        if m:
+            return cls(1, m.group(2))
+        raise RuntimeError('Cannot parse %s as a complexity' % str)
+        
+    def __lt__(self, other):
+        return self.a < other.a or self.a == other.a and self.c < other.c
+    
     def __str__(self):
-        return { 0:'poly', 1:'subexp', 2:'exp', 10:'unbounded' }[self.value]
+        if self.a == 0:
+            if self.c == 1:
+                return 'Õ(n)'
+            elif self.c < float('inf'):
+                return 'Õ(n<sup>%s</sup>)' % self.c
+            else:
+                return 'poly'
+        elif self.a == 1:
+            if self.c == 1:
+                return 'exp(n)'
+            elif self.c < float('inf'):
+                return 'exp(n)<sup>%s</sup>' % self.c
+            else:
+                return 'exp'
+        else:
+            if self.c < float('inf'):
+                return 'L(%s, %s)' % (self.a, self.c)
+            else:
+                return 'L(%s)' % self.a
+
+    def simple(self):
+        if self.a == 0:
+            return 'poly'
+        elif self.a == 1:
+            return 'exp'
+        else:
+            return 'subexp'
 
 class Entry:
     def __init__(self, id, props):
@@ -78,7 +122,7 @@ class Attack(Entry):
         class="quantum-{{ quantum | default(false) }}
         complexity">
     <td class="name">{{ this.name() }}</td>
-    <td class="complexity {{ complexity }}">{{ this.complexity() }}</td>
+    <td class="complexity {{ this.complexity().simple() }}">{{ this.complexity() }}</td>
     <td class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</td>
     <td class="reference">{{ this.reference() }}</td>
     <td class="comment-checkbox">{{ this.comment_checkbox("attack") }}</td>
@@ -92,16 +136,14 @@ class Attack(Entry):
         return self.props.get("quantum", False)
 
     def complexity(self):
-        return { 'poly': SecLvl.POLY,
-                 'subexp': SecLvl.SUBEXP,
-                 'exp': SecLvl.EXP }[self.props['complexity']]
+        return L.parse(self.props['complexity'])
 
 class Trivial(Attack):
     def __init__(self):
         self.id = 'trivial'
         
     def complexity(self):
-        return SecLvl.UNB
+        return L(10)
 trivial = Trivial()
     
 class Assumption(Entry):
@@ -117,11 +159,11 @@ class Assumption(Entry):
     template = Template("""
     <tr id="assumption-{{ id }}">
     <td class="name">{{ this.name() }}</td>
-    <td class="c_sec complexity {{ this.security(False) }}">
+    <td class="c_sec complexity {{ this.security(False).simple() }}">
     <a href="#attack-{{ this.best_attack(False).props.id }}"
        title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
     </td>
-    <td class="q_sec complexity {{ this.security() }}">
+    <td class="q_sec complexity {{ this.security().simple() }}">
     <a href="#attack-{{ this.best_attack().props.id }}"
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
@@ -178,11 +220,11 @@ class Scheme(Entry):
     <tr id="scheme-{{ id }}">
     <td class="name">{{ this.name() }}</td>
     <td class="type">{{ this.format_type() }}</td>
-    <td class="c_sec complexity {{ this.security(False) }}">
+    <td class="c_sec complexity {{ this.security(False).simple() }}">
     <a href="#attack-{{ this.best_attack(False).props.id }}"
        title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
     </td>
-    <td class="q_sec complexity {{ this.security() }}">
+    <td class="q_sec complexity {{ this.security().simple() }}">
     <a href="#attack-{{ this.best_attack().props.id }}"
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
