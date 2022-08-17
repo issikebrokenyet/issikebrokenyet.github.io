@@ -1,6 +1,8 @@
 import yaml
 from enum import IntEnum
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
+import markdown
+import re
 
 class SecLvl(IntEnum):
     POLY = 0
@@ -25,34 +27,6 @@ class Entry:
             return f'<abbr title="{ self.props["name"]["long"] }">{ self.props["name"]["short"] }</abbr>'
         else:
             return self.props['name'].get('short') or self.props['name'].get('long')
-    
-class Attack(Entry):
-    header = """
-    <tr>
-      <th>Name</th>
-      <th>Complexity</th>
-      <th>Quantum?</th>
-      <th>Reference</th>
-    </tr>
-    """
-    template = Template("""
-    <tr id="{{ id }}"
-        class="quantum-{{ quantum | default(false) }}
-        complexity">
-    <td class="name">{{ this.name() }}</td>
-    <td class="complexity {{ complexity }}">{{ this.complexity() }}</td>
-    <td class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</td>
-    <td class="reference">{{ this.reference() }}</td>
-    </tr>
-    """)
-
-    def quantum(self):
-        return self.props.get("quantum", False)
-
-    def complexity(self):
-        return { 'poly': SecLvl.POLY,
-                 'subexp': SecLvl.SUBEXP,
-                 'exp': SecLvl.EXP }[self.props['complexity']]
 
     def reference(self):
         links = []
@@ -63,7 +37,64 @@ class Attack(Entry):
             links.append(link)
         if links:
             return " ".join(links)
-        return "-" 
+        return "-"
+
+    def comment_checkbox(self):
+        if self.props.get("comment"):
+            return f'<input type="checkbox" name="comment-checkbox" id="comment-{self.props["id"]}-checkbox">'
+        return "-"
+
+    def reference_in_comment(self, comment):
+        # Collect the element's references
+        ref_dict = self.props.get("references", {})
+        comment_references = re.findall(r"\[(.*?)\]", comment)
+        # I don't want recursive replacement, so focus on unique
+        # matches...
+        comment_references = list(set(comment_references))
+        for ref in comment_references:
+            if ref in ref_dict:
+                anchor = f'<a class="reference-link" href="{ref_dict[ref]}" target="_blank">[{ref}]</a>'
+                comment = comment.replace(f"[{ref}]", anchor)
+        return comment
+
+    def comment(self):
+        comment_markdown = self.props.get("comment", "").rstrip()
+        comment_html =  markdown.markdown(comment_markdown, 
+                                 extensions=["nl2br"])
+        return self.reference_in_comment(comment_html)
+    
+class Attack(Entry):
+    header = """
+    <tr class="header-row">
+      <th>Name</th>
+      <th>Complexity</th>
+      <th>Quantum?</th>
+      <th>Reference</th>
+      <th>Comment</th>
+    </tr>
+    """
+    template = Template("""
+    <tr id="{{ id }}"
+        class="quantum-{{ quantum | default(false) }}
+        complexity">
+    <td class="name">{{ this.name() }}</td>
+    <td class="complexity {{ complexity }}">{{ this.complexity() }}</td>
+    <td class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</td>
+    <td class="reference">{{ this.reference() }}</td>
+    <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
+    </tr>
+    <tr id="comment-{{ id }}" class="hidden-row">
+        <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
+    </tr>
+    """)
+
+    def quantum(self):
+        return self.props.get("quantum", False)
+
+    def complexity(self):
+        return { 'poly': SecLvl.POLY,
+                 'subexp': SecLvl.SUBEXP,
+                 'exp': SecLvl.EXP }[self.props['complexity']]
 
 class Trivial(Attack):
     def __init__(self):
@@ -79,6 +110,8 @@ class Assumption(Entry):
       <th>Name</th>
       <th>Classical Security</th>
       <th>Quantum Security</th>
+      <th>Reference</th>
+      <th>Comment</th>
     </tr>
     """
     template = Template("""
@@ -92,6 +125,11 @@ class Assumption(Entry):
     <a href="#{{ this.best_attack().props.id }}"
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
+    <td class="reference">{{ this.reference() }}</td>
+    <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
+    </tr>
+    <tr id="comment-{{ id }}" class="hidden-row">
+        <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     """)
 
@@ -132,6 +170,8 @@ class Scheme(Entry):
       <th>Type</th>
       <th>Classical Security</th>
       <th>Quantum Security</th>
+      <th>Reference</th>
+      <th>Comment</th>
     </tr>
     """
     template = Template("""
@@ -146,6 +186,11 @@ class Scheme(Entry):
     <a href="#{{ this.best_attack().props.id }}"
        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
     </td>
+    <td class="reference">{{ this.reference() }}</td>
+    <td class="comment-checkbox">{{ this.comment_checkbox() }}</td>
+    </tr>
+    <tr id="comment-{{ id }}" class="hidden-row">
+        <td colspan="6" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     """)
 

@@ -1,14 +1,47 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+
     <title>Is SIKE broken yet?</title>
     <meta name="description"
           content="A knowledge base of most isogeny based cryptosystems and the best attacks on them." />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="canonical" href="https://issikebrokenyet.github.io" />
 
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Is SIKE broken yet?" />
+    <meta property="og:description" 
+          content="A knowledge base of most isogeny based cryptosystems and the best attacks on them." />
+    <meta property="og:url" content="https://issikebrokenyet.github.io/" />
+    <meta property="og:site_name" content="Is SIKE broken yet?" />
+    <meta property="og:image" content="https://issikebrokenyet.github.io/isby.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Is SIKE broken yet?" />
+    <meta name="twitter:description" 
+          content="A knowledge base of most isogeny based cryptosystems and the best attacks on them." />
+    <meta name="twitter:site" content="https://issikebrokenyet.github.io" />
+    <meta name="twitter:image" content="https://issikebrokenyet.github.io/isby.png" />
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#000000">
+    <link rel="shortcut icon" href="/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="style.css" />
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
-	  tex2jax: {inlineMath: [['$','$']]}
+    	  tex2jax: {
+          inlineMath: [['$','$']]
+        },
+        asciimath2jax: {
+          delimiters: [['$','$']]
+        }
       });
     </script>
     <script type="text/javascript" async
@@ -36,4 +69,19 @@
       <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
     </footer>
   </body>
+
+  <script>
+    // Select all checkboxes with the name 'settings' using querySelectorAll.
+    var checkboxes = document.querySelectorAll("input[type=checkbox][name=comment-checkbox]");
+
+    // Use Array.forEach to add an event listener to each checkbox.
+    checkboxes.forEach(function(checkbox) {
+      checkbox.addEventListener('change', function() {
+        const checkbox_id = this.id;
+        const comment_id = checkbox_id.replace("-checkbox", "");
+        const comment_ele = document.getElementById(comment_id);
+        comment_ele.classList.toggle("hidden-row");
+      })
+    });
+  </script>
 </html>
