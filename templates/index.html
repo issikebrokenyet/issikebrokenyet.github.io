@@ -90,5 +90,18 @@
         comment_ele.classList.toggle("hidden-row");
       })
     });
+
+    var abbr_elements = document.querySelectorAll("abbr");
+    // Use Array.forEach to add an event listener to each abbr element.
+    abbr_elements.forEach(function(abbr_element) {
+      // Show label on touch
+      abbr_element.addEventListener('touchstart', function() {
+        abbr_element.classList.add("touched");
+      });
+      // hide element when finger lifted
+      abbr_element.addEventListener('touchend', function() {
+        abbr_element.classList.remove("touched");
+      })
+    });
   </script>
 </html>

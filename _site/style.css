@@ -139,14 +139,13 @@ footer {
         overflow-x: scroll;
     }
 
-    abbr[title]:hover::after,
-    abbr[title]:focus::after {
+    abbr[title].touched::after {
         content: attr(title);
 
         /* position tooltip like the native one */
         position: absolute;
         left: 0;
-        bottom: -30px;
+        top: -30px;
         width: auto;
         white-space: nowrap;
 
