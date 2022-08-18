@@ -98,11 +98,15 @@
     abbr_elements.forEach(function(abbr_element) {
       // Show label on touch
       abbr_element.addEventListener('touchstart', function() {
-        abbr_element.classList.add("touched");
+        abbr_element.classList.toggle("touched");
       });
-      // hide element when finger lifted
+      // hide element when finger lifted after 2s delay
       abbr_element.addEventListener('touchend', function() {
-        abbr_element.classList.remove("touched");
+        setTimeout(function () {
+          if (abbr_element.classList.contains("touched")) {
+              abbr_element.classList.remove("touched");
+          }
+        }, 2000);
       })
     });
 

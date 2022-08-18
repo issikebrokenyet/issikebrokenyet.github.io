@@ -198,7 +198,7 @@ footer {
         /* position tooltip like the native one */
         position: absolute;
         left: 0;
-        top: -30px;
+        top: -40px;
         width: auto;
         white-space: nowrap;
 
