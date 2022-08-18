@@ -1,9 +1,40 @@
 :root{
     --background: white;
+    --text:  black;
     --red: #cf222e;
     --orange: #ffa700;
     --green: #2da44e;
+    --blue: #0969da;
+    --link: #0969da;
+    --link-visited: #8250df;
+    --highlight: #f6f8fa;
+    --cell-border: #d0d7de;
+    --target-highlight: #c2deef;
+    --comment-background: #e8ffe9;
+}
+
+html[data-theme='dark']{
+    --background: #0d1117;
+    --text:  #eaedf0;
+    --red: #fd2433;
+    --orange: #ffa700;
+    --green: #2da44e;
+    --blue: #58a6ff;
+    --link: #58a6ff;
+    --link-visited: #8250df;
+    --highlight: #161b22;
+    --cell-border: #c2deef;
+    --target-highlight: #c2deef;
+    --comment-background: #38fd880d;
+}
+
+html[data-theme='light']{
+    --background: white;
     --text:  black;
+    --red: #cf222e;
+    --orange: #ffa700;
+    --green: #2da44e;
+    --blue: #0969da;
     --link: #0969da;
     --link-visited: #8250df;
     --highlight: #f6f8fa;
@@ -18,9 +49,11 @@ html{
 }
 
 body{
-    margin: 1em auto;
+    margin: 3em auto;
     max-width: 850px;
     min-width: 544px;
+    background-color: var(--background);
+    color: var(--text);
 }
 
 p,ul {
@@ -51,7 +84,11 @@ table {
     width: -moz-available;
     width: -webkit-fill-available;
 }
+th, td {
+    padding: 13px 15px 11px 15px;
+}
 th{
+    border-bottom: solid 2px var(--cell-border);
     text-align: left;
 }
 
@@ -66,10 +103,22 @@ tr:target {
     background-color: var(--target-highlight);
 }
 
-th, td {
-    padding: 13px 15px 11px 15px;
-    border: solid 1px var(--cell-border);
+
+tr.variant-row td:first-child{
+    text-indent: 12px;
+    /*border-left: 3px solid var(--cell-border);*/
+    box-shadow: inset 3px 0px 0px 0px var(--blue);
 }
+tr.variant-row:nth-child(4n+1),
+tr.variant-row:nth-child(4n+3){
+    background-color: var(--var-highlight);
+}
+tr.variant-row:nth-child(4n+2),
+tr.variant-row:nth-child(4n+4){
+    background-color: var(--var-highlight-alt);
+}
+
+
 td a {
     color: inherit;
 }
@@ -84,9 +133,15 @@ abbr[title=""] {
     text-decoration: none;
 }
 
+.comment-checkbox{
+    text-align: center;
+}
 .comment-cell{
     line-height: 1.6em;
     background-color: var(--comment-background);
+    box-shadow: inset 3px 0px 0px 0px var(--green);
+    padding-left: 1.75em;
+
     -webkit-text-size-adjust: none
 }
 .comment-cell h4{
@@ -121,6 +176,16 @@ a.reference-link:visited{
 footer {
     margin: 2em 0;
     text-align: center;
+}
+
+/* Button Loops like Link */
+.btn-theme-toggle{
+    border: none;
+    background: var(--background);
+    font-size: 1em;
+    color: var(--blue);
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 
