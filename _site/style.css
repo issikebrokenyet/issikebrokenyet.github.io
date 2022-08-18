@@ -1,13 +1,13 @@
 :root,
 html[data-theme='light']{
-    --background: white;
-    --text:  black;
+    --background: #ffffff;
+    --text:  #000000;
     --red: #cf222e;
     --orange: #ffa700;
     --green: #2da44e;
     --blue: #0969da;
     --link: #0969da;
-    --link-visited: #8250df;
+    --link-visited: #9963ff;
     --highlight: #f6f8fa;
     --cell-border: #d0d7de;
     --target-highlight: #c2deef;
