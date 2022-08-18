@@ -1,4 +1,5 @@
-:root{
+:root,
+html[data-theme='light']{
     --background: white;
     --text:  black;
     --red: #cf222e;
@@ -24,24 +25,11 @@ html[data-theme='dark']{
     --link-visited: #8250df;
     --highlight: #161b22;
     --cell-border: #c2deef;
-    --target-highlight: #c2deef;
+    --target-highlight: #58a6ff36;
     --comment-background: #38fd880d;
 }
 
-html[data-theme='light']{
-    --background: white;
-    --text:  black;
-    --red: #cf222e;
-    --orange: #ffa700;
-    --green: #2da44e;
-    --blue: #0969da;
-    --link: #0969da;
-    --link-visited: #8250df;
-    --highlight: #f6f8fa;
-    --cell-border: #d0d7de;
-    --target-highlight: #c2deef;
-    --comment-background: #e8ffe9;
-}
+
 
 html{
     margin: 0 1em;
