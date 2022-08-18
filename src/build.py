@@ -106,7 +106,35 @@ class Entry:
         comment_html =  markdown.markdown(comment_markdown, 
                                  extensions=["nl2br"])
         return self.reference_in_comment(comment_html)
-    
+
+    def get_variant(self, id, props):
+        variant = Variant(id, props)
+        return variant
+
+class Variant(Entry):
+    """
+    Development note:
+    I want this to be the only class for Variant
+    but we're going to have to be careful, as
+    a variant needs to inherit some additional
+    data from the parent (e.g. we want the name
+    and security and best attacks to be available
+    too... Not sure this is the best solution.)
+    """
+    template = Template("""
+    <tr id="variant-{{ id }}" class="variant-row">
+        <td class="name">{{ id }}</td>
+        <td class="c_sec complexity">
+            TODO
+        </td>
+        <td class="q_sec complexity">
+            TODO
+        </td>
+        <td class="reference">{{ this.reference() }}</td>
+        <td class="comment-checkbox">{{ this.comment_checkbox("assumption") }}</td>
+    </tr>
+    """)
+
 class Attack(Entry):
     header = """
     <tr class="header-row">
@@ -157,22 +185,27 @@ class Assumption(Entry):
     </tr>
     """
     template = Template("""
-    <tr id="assumption-{{ id }}">
-    <td class="name">{{ this.name() }}</td>
-    <td class="c_sec complexity {{ this.security(False).simple() }}">
-    <a href="#attack-{{ this.best_attack(False).props.id }}"
-       title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
-    </td>
-    <td class="q_sec complexity {{ this.security().simple() }}">
-    <a href="#attack-{{ this.best_attack().props.id }}"
-       title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
-    </td>
-    <td class="reference">{{ this.reference() }}</td>
-    <td class="comment-checkbox">{{ this.comment_checkbox("assumption") }}</td>
+    <tr id="assumption-{{ id }}" class="base-row">
+        <td class="name">{{ this.name() }}</td>
+        <td class="c_sec complexity {{ this.security(False).simple() }}">
+        <a href="#attack-{{ this.best_attack(False).props.id }}"
+           title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
+        </td>
+        <td class="q_sec complexity {{ this.security().simple() }}">
+        <a href="#attack-{{ this.best_attack().props.id }}"
+           title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
+        </td>
+        <td class="reference">{{ this.reference() }}</td>
+        <td class="comment-checkbox">{{ this.comment_checkbox("assumption") }}</td>
     </tr>
-    <tr id="comment-assumption-{{ id }}" class="hidden-row">
+    <tr id="comment-assumption-{{ id }}" class="base-row hidden-row">
         <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
+    {% if this.props.variants %}
+        {% for variant, props in this.props.variants.items() %}
+            {{ this.get_variant(variant, props) }}
+        {% endfor%}
+    {% endif%}
     """)
 
     def link(self, assumptions, attacks):
