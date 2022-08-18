@@ -120,10 +120,21 @@ class Variant(Entry):
     data from the parent (e.g. we want the name
     and security and best attacks to be available
     too... Not sure this is the best solution.)
+
+    Another solution would be to make three variant
+    classes Variant(Attack) e.g. then we have everything
+    we need at a function level with the issue of more
+    code reuse.
     """
+
+    # I think formatting the "variant-name" cell should be
+    # parent name (variant name)
+    #   e.g. Parallisation (supersingular)
+    # To do this we need name from the parent when constructing
+    # the variant.
     template = Template("""
     <tr id="variant-{{ id }}" class="variant-row">
-        <td class="name">{{ id }}</td>
+        <td class="variant-name">{{ id }}</td>
         <td class="c_sec complexity">
             TODO
         </td>
