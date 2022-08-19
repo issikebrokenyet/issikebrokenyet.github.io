@@ -161,6 +161,18 @@ trivial = Trivial()
 #----------------------------------------------#
 
 class Assumption(Entry):
+    """
+    The extra hidden rows are for CSS nonsense.
+    Another option would be to use JS to change classes
+    but I really want as little JS as possible...
+
+    Basically, the problem is:
+
+    We can select nth-elements, but we can't count
+    only elements with a certain class, so when we
+    have an odd number of variants, the odd/even
+    color highlight gets an off by one error...
+    """
     header = """
     <tr>
       <th>Name</th>
