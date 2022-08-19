@@ -78,17 +78,58 @@
   </body>
 
   <script>
-    // Select all checkboxes with the name 'settings' using querySelectorAll.
-    var checkboxes = document.querySelectorAll("input[type=checkbox][name=comment-checkbox]");
+    // Select all comment checkboxes with the name using querySelectorAll.
+    var commentCheckboxes = document.querySelectorAll("input[type=checkbox][name=comment-checkbox]");
 
     // Use Array.forEach to add an event listener to each checkbox.
-    checkboxes.forEach(function(checkbox) {
+    commentCheckboxes.forEach(function(checkbox) {
       checkbox.addEventListener('change', function() {
-        const checkbox_id = this.id;
-        const comment_id = checkbox_id.replace("-checkbox", "");
-        const comment_ele = document.getElementById(comment_id);
-        comment_ele.classList.toggle("hidden-row");
+        const checkboxId = this.id;
+        const commentId = checkboxId.replace("-checkbox", "");
+        const commentEle = document.getElementById(commentId);
+        commentEle.classList.toggle("hidden-row");
       })
+    });
+
+    // Select all checkboxes with the name 'settings' using querySelectorAll.
+    var variantCheckboxes = document.querySelectorAll("input[type=checkbox][name=variant-checkbox]");
+
+    // Use Array.forEach to add an event listener to each checkbox.
+    variantCheckboxes.forEach(function(checkbox) {
+      checkbox.addEventListener('change', function() {
+        const checkboxId = this.id;
+        const variantClassName = checkboxId.replace("-checkbox", "");
+        console.log(variantClassName)
+        var variantElements = document.getElementsByClassName(variantClassName);
+        console.log(variantElements)
+
+        Array.prototype.forEach.call(variantElements, function(variantElement) {
+          variantElement.classList.toggle("hidden-row");
+          
+
+          // Nasty hack so that if a variant is hidden while a comment is open
+          // We close the comment.
+          // This is very fragile on how DIVS are named currently...
+          // But I don't pass the parent name to the variant, so 
+          // I can't see a quick solution.
+          // Build the id of the comment and checkbox
+          words = variantElement.id.split('-')
+          commentId = "comment-" + words[1] + "-variant-" + words[3];
+          commentCheckboxId = commentId + "-checkbox";
+
+          // Grab the comment
+          variantComment = document.getElementById(commentId);
+          // If the variant is currently visible AND we have hidden the variant
+          // Hide the comment and remove the check from the checkbox.
+          if (!variantComment.classList.contains("hidden-row") && 
+               variantElement.classList.contains("hidden-row")){
+              document.getElementById(commentCheckboxId).click()  
+          }
+
+
+
+        });
+      });
     });
   </script>
 </html>

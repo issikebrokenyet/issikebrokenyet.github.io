@@ -88,6 +88,11 @@ class Entry:
             return f'<input type="checkbox" name="comment-checkbox" id="comment-{table}-{self.props["id"]}-checkbox">'
         return "-"
 
+    def variant_checkbox(self, table):
+        if self.props.get("variants"):
+            return f'<input type="checkbox" name="variant-checkbox" id="variant-{table}-{self.props["id"]}-checkbox">'
+        return ""
+
     def reference_in_comment(self, comment):
         # Collect the element's references
         ref_dict = self.props.get("references", {})
@@ -106,45 +111,6 @@ class Entry:
         comment_html =  markdown.markdown(comment_markdown, 
                                  extensions=["nl2br"])
         return self.reference_in_comment(comment_html)
-
-    def get_variant(self, id, props):
-        variant = Variant(id, props)
-        return variant
-
-class Variant(Entry):
-    """
-    Development note:
-    I want this to be the only class for Variant
-    but we're going to have to be careful, as
-    a variant needs to inherit some additional
-    data from the parent (e.g. we want the name
-    and security and best attacks to be available
-    too... Not sure this is the best solution.)
-
-    Another solution would be to make three variant
-    classes Variant(Attack) e.g. then we have everything
-    we need at a function level with the issue of more
-    code reuse.
-    """
-
-    # I think formatting the "variant-name" cell should be
-    # parent name (variant name)
-    #   e.g. Parallisation (supersingular)
-    # To do this we need name from the parent when constructing
-    # the variant.
-    template = Template("""
-    <tr id="variant-{{ id }}" class="variant-row">
-        <td class="variant-name">{{ id }}</td>
-        <td class="c_sec complexity">
-            TODO
-        </td>
-        <td class="q_sec complexity">
-            TODO
-        </td>
-        <td class="reference">{{ this.reference() }}</td>
-        <td class="comment-checkbox">{{ this.comment_checkbox("assumption") }}</td>
-    </tr>
-    """)
 
 class Attack(Entry):
     header = """
@@ -185,6 +151,11 @@ class Trivial(Attack):
         return L(10)
 trivial = Trivial()
     
+
+#----------------------------------------------#
+# Logic for Assumption and Assumption variants #
+#----------------------------------------------#
+
 class Assumption(Entry):
     header = """
     <tr>
@@ -192,7 +163,7 @@ class Assumption(Entry):
       <th>Classical Security</th>
       <th>Quantum Security</th>
       <th>Reference</th>
-      <th>Comment</th>
+      <th>Additional Information</th>
     </tr>
     """
     template = Template("""
@@ -207,14 +178,19 @@ class Assumption(Entry):
            title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
         </td>
         <td class="reference">{{ this.reference() }}</td>
-        <td class="comment-checkbox">{{ this.comment_checkbox("assumption") }}</td>
+        <td class="checkboxes">
+            {{ this.comment_checkbox("assumption") }}
+            {{ this.variant_checkbox("assumption") }}
+        </td>
     </tr>
     <tr id="comment-assumption-{{ id }}" class="base-row hidden-row">
         <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     {% if this.props.variants %}
         {% for variant, props in this.props.variants.items() %}
+            <tr id="variant-assumption-{{ id }}-{{ variant }}" class="hidden-row variant-row variant-assumption-{{ id }}">
             {{ this.get_variant(variant, props) }}
+            </tr>
         {% endfor%}
     {% endif%}
     """)
@@ -248,6 +224,49 @@ class Assumption(Entry):
         
     def security(self, quantum=True):
         return self.best_attack(quantum).complexity()
+
+    def get_variant(self, id, props):
+        return AssumptionVariant(id, props)
+
+class AssumptionVariant(Assumption):
+    # template = Template("""
+    # <tr id="variant-{{ id }}" class="variant-row">
+    #     <td class="name">{{ this.name() }}</td>
+    #     <td class="c_sec complexity {{ this.security(False).simple() }}">
+    #     <a href="#attack-{{ this.best_attack(False).props.id }}"
+    #        title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
+    #     </td>
+    #     <td class="q_sec complexity {{ this.security().simple() }}">
+    #     <a href="#attack-{{ this.best_attack().props.id }}"
+    #        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
+    #     </td>
+    #     <td class="reference">{{ this.reference() }}</td>
+    #     <td class="comment-checkbox">{{ this.comment_checkbox("assumption-variant") }}</td>
+    # </tr>
+    # <tr id="comment-assumption-variant-{{ id }}" class="hidden-row">
+    #     <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
+    # </tr>
+    # """)
+    template = Template("""
+        <td class="name">{{ this.name() }}</td>
+        <td class="c_sec complexity ">
+        <a href="#attack-"
+           title=""></a>
+        </td>
+        <td class="q_sec complexity ">
+        <a href="#attack-"
+           title=""></a>
+        </td>
+        <td class="reference">{{ this.reference() }}</td>
+        <td class="comment-checkbox">{{ this.comment_checkbox("assumption-variant") }}</td>
+    </tr>
+    <tr id="comment-assumption-variant-{{ id }}" class="hidden-row">
+        <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
+    """)
+
+#---------------------------------------#
+# Logic for Schemes and Scheme variants #
+#---------------------------------------#
 
 class Scheme(Entry):
     header = """
@@ -297,6 +316,10 @@ class Scheme(Entry):
         if isinstance(type_data, list):
             return ", ".join(type_data)
         return type_data
+
+#-----------------------------#
+# Logic to build the template #
+#-----------------------------#
 
     
 with open('attacks.yml') as att:

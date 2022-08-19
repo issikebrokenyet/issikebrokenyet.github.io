@@ -197,20 +197,32 @@ parallelization:
     The anaologue of CDH for Group Actions.
   variants:
     ordinary:
+      name:
+        long: Parallelization (ordinary)
       reduces_to:
-        - vector>ordinary
+        - vector
+      comment: >-
+        First proposed in [Cou06].
     supersingular:
+      name:
+        long: Parallelization (supersingular)
       references:
         CD19: 'https://eprint.iacr.org/2019/1404'
       reduces_to:
-        - vector>supersingular
-      comments: Introduced for CSIDH
+        - vector
+      comment: >-
+        Introduced for CSIDH [CD19]
     oriented:
+      name:
+        long: Parallelization (oriented)
       references:
         CK20: 'https://eprint.iacr.org/2020/985'
         Wes21: 'https://eprint.iacr.org/2021/1583'
       reduces_to:
-        - vector>oriented
+        - vector
+      comment: >-
+        Shown to be equivalent to O-EndRing in [Wes21]
+
 
 cssi-bsidh:
   name:
