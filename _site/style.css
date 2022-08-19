@@ -1,12 +1,13 @@
-:root{
-    --background: white;
+:root,
+html[data-theme='light']{
+    --background: #ffffff;
+    --text:  #000000;
     --red: #cf222e;
     --orange: #ffa700;
     --green: #2da44e;
-    --text:  black;
     --blue: #0969da;
     --link: #0969da;
-    --link-visited: #8250df;
+    --link-visited: #9963ff;
     --highlight: #f6f8fa;
     --cell-border: #d0d7de;
     --target-highlight: #c2deef;
@@ -16,15 +17,34 @@
     --variant-highlight-alt: #f0f4ff;
 }
 
+html[data-theme='dark']{
+    --background: #0d1117;
+    --text:  #eaedf0;
+    --red: #fd2433;
+    --orange: #ffa700;
+    --green: #2da44e;
+    --blue: #58a6ff;
+    --link: #58a6ff;
+    --link-visited: #8250df;
+    --highlight: #161b22;
+    --cell-border: #c2deef;
+    --target-highlight: #58a6ff36;
+    --comment-background: #38fd880d;
+}
+
+
+
 html{
     margin: 0 1em;
     font-family:  sans-serif;
 }
 
 body{
-    margin: 1em auto;
+    margin: 3em auto;
     max-width: 850px;
     min-width: 544px;
+    background-color: var(--background);
+    color: var(--text);
 }
 
 p,ul {
@@ -104,12 +124,14 @@ abbr[title=""] {
     text-decoration: none;
 }
 
+.comment-checkbox{
+    text-align: center;
+}
 .comment-cell{
     line-height: 1.6em;
     background-color: var(--comment-background);
-    /*border-left: 3px, solid var(--green);*/
     box-shadow: inset 3px 0px 0px 0px var(--green);
-
+    padding-left: 1.75em;
     -webkit-text-size-adjust: none
 }
 .comment-cell h4{
@@ -146,6 +168,16 @@ footer {
     text-align: center;
 }
 
+/* Button Loops like Link */
+.btn-theme-toggle{
+    border: none;
+    background: var(--background);
+    font-size: 1em;
+    color: var(--blue);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 
 
 
@@ -164,14 +196,13 @@ footer {
         overflow-x: scroll;
     }
 
-    abbr[title]:hover::after,
-    abbr[title]:focus::after {
+    abbr[title].touched::after {
         content: attr(title);
 
         /* position tooltip like the native one */
         position: absolute;
         left: 0;
-        bottom: -30px;
+        top: -40px;
         width: auto;
         white-space: nowrap;
 
