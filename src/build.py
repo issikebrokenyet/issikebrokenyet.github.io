@@ -5,9 +5,9 @@ import markdown
 import re
 
 class L:
-    '''
+    """
     Complexity function L(a,c) = exp( (c+o(1)) (log n)^a (loglog n)^(1-a) )
-    '''
+    """
     def __init__(self, a, c=None):
         self.a = Fraction(a)
         self.c = Fraction(c) if c is not None else float('inf')
@@ -56,6 +56,10 @@ class L:
             return 'exp'
         else:
             return 'subexp'
+
+#----------------------------------#
+# Main Class for Rows in our table #
+#----------------------------------#
 
 class Entry:
     def __init__(self, id, props):
@@ -116,6 +120,10 @@ class Entry:
                                  extensions=["nl2br"])
         return self.reference_in_comment(comment_html)
 
+#-------------------#
+# Logic for Attacks #
+#-------------------#
+
 class Attack(Entry):
     header = """
     <tr class="header-row">
@@ -172,6 +180,8 @@ class Assumption(Entry):
     only elements with a certain class, so when we
     have an odd number of variants, the odd/even
     color highlight gets an off by one error...
+
+    This is done in Schemes too
     """
     header = """
     <tr>
@@ -363,7 +373,6 @@ class SchemeVariant(Scheme):
     </tr>
     """)
 
-
 #-----------------------------#
 # Logic to build the template #
 #-----------------------------#
@@ -398,7 +407,6 @@ with open('attacks.yml') as att:
                 s.link(assumptions)
             for sv in schemes_variants.values():
                 sv.link(assumptions)
-
 
             env = Environment(
                 loader = FileSystemLoader("templates"),

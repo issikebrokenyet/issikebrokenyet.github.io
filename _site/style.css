@@ -1,7 +1,8 @@
 :root,
 html[data-theme='light']{
     --background: #ffffff;
-    --text:  #000000;
+    --text: #000000;
+    --dimmed-text: #7b7d82;
     --red: #cf222e;
     --orange: #ffa700;
     --green: #2da44e;
@@ -12,7 +13,6 @@ html[data-theme='light']{
     --cell-border: #d0d7de;
     --target-highlight: #c2deef;
     --comment-background: #f0fff0;
-
     --variant-highlight: #e0e7ff;
     --variant-highlight-alt: #f0f4ff;
 }
@@ -20,19 +20,20 @@ html[data-theme='light']{
 html[data-theme='dark']{
     --background: #0d1117;
     --text:  #eaedf0;
+    --dimmed-text: #7b7d82;
     --red: #fd2433;
     --orange: #ffa700;
     --green: #2da44e;
     --blue: #58a6ff;
     --link: #58a6ff;
-    --link-visited: #8250df;
+    --link-visited: #9669ea;
     --highlight: #161b22;
     --cell-border: #c2deef;
     --target-highlight: #58a6ff36;
     --comment-background: #38fd880d;
+    --variant-highlight: #6282ff1a;
+    --variant-highlight-alt: #6282ff26;
 }
-
-
 
 html{
     margin: 0 1em;
@@ -69,6 +70,9 @@ a:visited{
     color: var(--link-visited);
 }
 
+/*
+  Table Stuff
+*/
 table {
     border-collapse: collapse;
     margin-bottom: 3em;
@@ -82,8 +86,6 @@ th{
     border-bottom: solid 2px var(--cell-border);
     text-align: left;
 }
-
-
 tr:nth-child(4n+3),
 tr:nth-child(4n+4){
     background-color: var(--highlight);
@@ -94,8 +96,6 @@ tr.header-row{
 tr:target {
     background-color: var(--target-highlight);
 }
-
-
 tr.variant-row td:first-child{
     text-indent: 12px;
     box-shadow: inset 3px 0px 0px 0px var(--blue);
@@ -108,22 +108,15 @@ tr.variant-row:nth-child(4n+3),
 tr.variant-row:nth-child(4n+4){
     background-color: var(--variant-highlight-alt);
 }
-
-
 td a {
     color: inherit;
 }
-
-abbr[title] {
-  position: relative;
-  /* ensure consistent styling across browsers */
-  text-decoration: underline dotted; 
+.hidden-row{
+    display: none;
 }
-
-abbr[title=""] {
-    text-decoration: none;
-}
-
+/*
+  Comment styling
+*/
 .comment-checkbox{
     text-align: center;
 }
@@ -138,8 +131,28 @@ abbr[title=""] {
     margin: 1rem 0;
 }
 
-.hidden-row{
-    display: none;
+
+/*
+  Abbr Stuff
+*/
+abbr[title] {
+  position: relative;
+  /* ensure consistent styling across browsers */
+  text-decoration: underline dotted; 
+}
+
+abbr[title=""] {
+    text-decoration: none;
+}
+
+/*
+  Checkbox styling
+*/
+input[type="checkbox"] + label{
+    color: var(--dimmed-text);
+}
+input[type="checkbox"]:checked + label{
+    color: var(--text);
 }
 
 .complexity.exp {
