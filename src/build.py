@@ -327,6 +327,14 @@ class Scheme(Entry):
 # Logic to build the template #
 #-----------------------------#
 
+def create_classes_from_yml(yml_data, ClassBase, ClassVariant):
+    class_dict = {}
+    class_variants_dict = {}
+    for (id, props) in yaml.safe_load(yml_data).items():
+        class_dict[id] = ClassBase(id, props)
+        for (id_variant, props_variant) in props.get("variants", {}).items():
+            class_variants_dict[id_variant] = ClassVariant(id_variant, props_variant, id)
+    return class_dict, class_variants_dict
     
 with open('attacks.yml') as att:
     with open('assumptions.yml') as ass:
@@ -334,14 +342,10 @@ with open('attacks.yml') as att:
             attacks = { id : Attack(id, props)
                         for (id, props) in yaml.safe_load(att).items() }
 
-            # For the link, we now need to collect assumptions and
-            # assumption variants!
-            assumptions = {}
-            assumptions_variants = {}
-            for (id, props) in yaml.safe_load(ass).items():
-                assumptions[id] = Assumption(id, props)
-                for (id_variant, props_variant) in props.get("variants", {}).items():
-                    assumptions_variants[id_variant] = AssumptionVariant(id_variant, props_variant, id)
+            # For the link, we now need to collect assumptions and variants
+            # This code got longer, so I factored it out for reuse for other
+            # Classes
+            assumptions, assumptions_variants = create_classes_from_yml(ass, Assumption, AssumptionVariant)
 
             schemes = { id : Scheme(id, props)
                         for (id, props) in yaml.safe_load(sch).items() }
@@ -350,6 +354,7 @@ with open('attacks.yml') as att:
                 a.link(assumptions, attacks)
             for av in assumptions_variants.values():
                 av.link(assumptions, attacks)
+            
             for s in schemes.values():
                 s.link(assumptions)
 
