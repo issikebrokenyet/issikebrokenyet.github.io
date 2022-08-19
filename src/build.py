@@ -188,9 +188,7 @@ class Assumption(Entry):
     </tr>
     {% if this.props.variants %}
         {% for variant, props in this.props.variants.items() %}
-            <tr id="variant-assumption-{{ id }}-{{ variant }}" class="hidden-row variant-row variant-assumption-{{ id }}">
-            {{ this.get_variant(variant, props) }}
-            </tr>
+            {{ this.get_variant(variant, props, id) }}
         {% endfor%}
     {% endif%}
     """)
@@ -225,12 +223,15 @@ class Assumption(Entry):
     def security(self, quantum=True):
         return self.best_attack(quantum).complexity()
 
-    def get_variant(self, id, props):
-        return AssumptionVariant(id, props)
+    def get_variant(self, id, props, parent):
+        return AssumptionVariant(id, props, parent)
 
 class AssumptionVariant(Assumption):
+    def __init__(self, id, props, parent):
+        Assumption.__init__(self, id, props)
+        self.parent = parent
     # template = Template("""
-    # <tr id="variant-{{ id }}" class="variant-row">
+    # <tr id="variant-assumption-{{ this.parent }}-{{ id }}" class="hidden-row variant-row variant-assumption-{{ this.parent }}">
     #     <td class="name">{{ this.name() }}</td>
     #     <td class="c_sec complexity {{ this.security(False).simple() }}">
     #     <a href="#attack-{{ this.best_attack(False).props.id }}"
@@ -248,6 +249,7 @@ class AssumptionVariant(Assumption):
     # </tr>
     # """)
     template = Template("""
+    <tr id="variant-assumption-{{ this.parent }}-{{ id }}" class="hidden-row variant-row variant-assumption-{{ this.parent }}">
         <td class="name">{{ this.name() }}</td>
         <td class="c_sec complexity ">
         <a href="#attack-"
@@ -262,6 +264,7 @@ class AssumptionVariant(Assumption):
     </tr>
     <tr id="comment-assumption-variant-{{ id }}" class="hidden-row">
         <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
+    </tr>
     """)
 
 #---------------------------------------#
