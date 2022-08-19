@@ -99,22 +99,14 @@
       checkbox.addEventListener('change', function() {
         const checkboxId = this.id;
         const variantClassName = checkboxId.replace("-checkbox", "");
-        console.log(variantClassName)
         var variantElements = document.getElementsByClassName(variantClassName);
-        console.log(variantElements)
 
         Array.prototype.forEach.call(variantElements, function(variantElement) {
           variantElement.classList.toggle("hidden-row");
           
-
           // Nasty hack so that if a variant is hidden while a comment is open
           // We close the comment.
-          // This is very fragile on how DIVS are named currently...
-          // But I don't pass the parent name to the variant, so 
-          // I can't see a quick solution.
-          // Build the id of the comment and checkbox
-          words = variantElement.id.split('-')
-          commentId = "comment-" + words[1] + "-variant-" + words[3];
+          commentId = "comment-" + variantElement.id.replace("variant-", "")
           commentCheckboxId = commentId + "-checkbox";
 
           // Grab the comment

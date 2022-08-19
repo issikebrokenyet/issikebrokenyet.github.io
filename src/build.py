@@ -85,12 +85,16 @@ class Entry:
 
     def comment_checkbox(self, table):
         if self.props.get("comment"):
-            return f'<input type="checkbox" name="comment-checkbox" id="comment-{table}-{self.props["id"]}-checkbox">'
+            input_ele = f'<input type="checkbox" name="comment-checkbox" id="comment-{table}-{self.props["id"]}-checkbox">'
+            label_ele = f'<label for="comment-{table}-{self.props["id"]}-checkbox">Comments</label>'
+            return f"{input_ele}\n{label_ele}"
         return "-"
 
     def variant_checkbox(self, table):
         if self.props.get("variants"):
-            return f'<input type="checkbox" name="variant-checkbox" id="variant-{table}-{self.props["id"]}-checkbox">'
+            input_ele =  f'<input type="checkbox" name="variant-checkbox" id="variant-{table}-{self.props["id"]}-checkbox">'
+            label_ele = f'<label for="variant-{table}-{self.props["id"]}-checkbox">Variants</label>'
+            return f"<br>{input_ele}\n{label_ele}"
         return ""
 
     def reference_in_comment(self, comment):
@@ -119,7 +123,7 @@ class Attack(Entry):
       <th>Complexity</th>
       <th>Quantum?</th>
       <th>Reference</th>
-      <th>Comment</th>
+      <th>Additional Information</th>
     </tr>
     """
     template = Template("""
@@ -167,7 +171,7 @@ class Assumption(Entry):
     </tr>
     """
     template = Template("""
-    <tr id="assumption-{{ id }}" class="base-row">
+    <tr id="assumption-{{ id }}">
         <td class="name">{{ this.name() }}</td>
         <td class="c_sec complexity {{ this.security(False).simple() }}">
         <a href="#attack-{{ this.best_attack(False).props.id }}"
@@ -183,7 +187,7 @@ class Assumption(Entry):
             {{ this.variant_checkbox("assumption") }}
         </td>
     </tr>
-    <tr id="comment-assumption-{{ id }}" class="base-row hidden-row">
+    <tr id="comment-assumption-{{ id }}" class="hidden-row">
         <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     {% if this.props.variants %}
@@ -191,6 +195,10 @@ class Assumption(Entry):
             {{ this.get_variant(variant, props, id) }}
         {% endfor%}
     {% endif%}
+    {% if this.props.variants|length % 2 == 1 %}
+        <tr class="hidden-row"><td colspan="5"></td></tr>
+        <tr class="hidden-row"><td colspan="5"></td></tr>
+    {% endif %}
     """)
 
     def link(self, assumptions, attacks):
@@ -260,9 +268,9 @@ class AssumptionVariant(Assumption):
            title=""></a>
         </td>
         <td class="reference">{{ this.reference() }}</td>
-        <td class="comment-checkbox">{{ this.comment_checkbox("assumption-variant") }}</td>
+        <td class="comment-checkbox">{{ this.comment_checkbox("assumption-" + this.parent) }}</td>
     </tr>
-    <tr id="comment-assumption-variant-{{ id }}" class="hidden-row">
+    <tr id="comment-assumption-{{ this.parent }}-{{ id }}" class="hidden-row">
         <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
     """)
@@ -279,7 +287,7 @@ class Scheme(Entry):
       <th>Classical Security</th>
       <th>Quantum Security</th>
       <th>Reference</th>
-      <th>Comment</th>
+      <th>Additional Information</th>
     </tr>
     """
     template = Template("""

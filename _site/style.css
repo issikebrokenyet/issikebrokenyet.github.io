@@ -12,8 +12,8 @@
     --target-highlight: #c2deef;
     --comment-background: #f0fff0;
 
-    --var-highlight: #e0e7ff;
-    --var-highlight-alt: #f0f4ff;
+    --variant-highlight: #e0e7ff;
+    --variant-highlight-alt: #f0f4ff;
 }
 
 html{
@@ -63,8 +63,9 @@ th{
     text-align: left;
 }
 
-tr.base-row:nth-child(4n+3),
-tr.base-row:nth-child(4n+4){
+
+tr:nth-child(4n+3),
+tr:nth-child(4n+4){
     background-color: var(--highlight);
 }
 tr.header-row{
@@ -77,16 +78,15 @@ tr:target {
 
 tr.variant-row td:first-child{
     text-indent: 12px;
-    /*border-left: 3px solid var(--cell-border);*/
     box-shadow: inset 3px 0px 0px 0px var(--blue);
 }
 tr.variant-row:nth-child(4n+1),
-tr.variant-row:nth-child(4n+3){
-    background-color: var(--var-highlight);
+tr.variant-row:nth-child(4n+2){
+    background-color: var(--variant-highlight);
 }
-tr.variant-row:nth-child(4n+2),
+tr.variant-row:nth-child(4n+3),
 tr.variant-row:nth-child(4n+4){
-    background-color: var(--var-highlight-alt);
+    background-color: var(--variant-highlight-alt);
 }
 
 
