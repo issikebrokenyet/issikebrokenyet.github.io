@@ -287,22 +287,34 @@ class Scheme(Entry):
     """
     template = Template("""
     <tr id="scheme-{{ id }}">
-    <td class="name">{{ this.name() }}</td>
-    <td class="type">{{ this.format_type() }}</td>
-    <td class="c_sec complexity {{ this.security(False).simple() }}">
-    <a href="#attack-{{ this.best_attack(False).props.id }}"
-       title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
-    </td>
-    <td class="q_sec complexity {{ this.security().simple() }}">
-    <a href="#attack-{{ this.best_attack().props.id }}"
-       title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
-    </td>
-    <td class="reference">{{ this.reference() }}</td>
-    <td class="comment-checkbox">{{ this.comment_checkbox("scheme") }}</td>
+        <td class="name">{{ this.name() }}</td>
+        <td class="type">{{ this.format_type() }}</td>
+        <td class="c_sec complexity {{ this.security(False).simple() }}">
+        <a href="#attack-{{ this.best_attack(False).props.id }}"
+           title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
+        </td>
+        <td class="q_sec complexity {{ this.security().simple() }}">
+        <a href="#attack-{{ this.best_attack().props.id }}"
+           title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
+        </td>
+        <td class="reference">{{ this.reference() }}</td>
+        <td class="checkboxes">
+            {{ this.comment_checkbox("scheme") }}
+            {{ this.variant_checkbox("scheme") }}
+        </td>
     </tr>
     <tr id="comment-scheme-{{ id }}" class="hidden-row">
         <td colspan="6" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
     </tr>
+    {% if this.props.variants %}
+        {% for variant, props in this.props.variants.items() %}
+            {{ this.get_variant(variant, props, id) }}
+        {% endfor%}
+    {% endif%}
+    {% if this.props.variants|length % 2 == 1 %}
+        <tr class="hidden-row"><td colspan="6"></td></tr>
+        <tr class="hidden-row"><td colspan="6"></td></tr>
+    {% endif %}
     """)
 
     def link(self, assumptions):
@@ -322,6 +334,35 @@ class Scheme(Entry):
         if isinstance(type_data, list):
             return ", ".join(type_data)
         return type_data
+
+    def get_variant(self, id, props, parent):
+        return SchemeVariant(id, props, parent)
+
+class SchemeVariant(Scheme):
+    def __init__(self, id, props, parent):
+        Scheme.__init__(self, id, props)
+        self.parent = parent
+
+    template = Template("""
+    <tr id="variant-scheme-{{ this.parent }}-{{ id }}" class="hidden-row variant-row variant-scheme-{{ this.parent }}">
+        <td class="name">{{ this.name() }}</td>
+        <td class="type">{{ this.format_type() }}</td>
+        <td class="c_sec complexity {{ this.security(False).simple() }}">
+        <a href="#attack-{{ this.best_attack(False).props.id }}"
+           title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
+        </td>
+        <td class="q_sec complexity {{ this.security().simple() }}">
+        <a href="#attack-{{ this.best_attack().props.id }}"
+           title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
+        </td>
+        <td class="reference">{{ this.reference() }}</td>
+        <td class="comment-checkbox">{{ this.comment_checkbox("scheme-" + this.parent) }}</td>
+    </tr>
+    <tr id="comment-scheme-{{ this.parent }}-{{ id }}" class="hidden-row">
+        <td colspan="6" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
+    </tr>
+    """)
+
 
 #-----------------------------#
 # Logic to build the template #
@@ -346,9 +387,7 @@ with open('attacks.yml') as att:
             # This code got longer, so I factored it out for reuse for other
             # Classes
             assumptions, assumptions_variants = create_classes_from_yml(ass, Assumption, AssumptionVariant)
-
-            schemes = { id : Scheme(id, props)
-                        for (id, props) in yaml.safe_load(sch).items() }
+            schemes, schemes_variants = create_classes_from_yml(sch, Scheme, SchemeVariant)
             
             for a in assumptions.values():
                 a.link(assumptions, attacks)
@@ -357,6 +396,9 @@ with open('attacks.yml') as att:
             
             for s in schemes.values():
                 s.link(assumptions)
+            for sv in schemes_variants.values():
+                sv.link(assumptions)
+
 
             env = Environment(
                 loader = FileSystemLoader("templates"),

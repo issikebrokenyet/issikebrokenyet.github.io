@@ -15,6 +15,18 @@ sidh:
     $ℓ=2,3$ became standard. The choice of having $p = 3 \bmod 4$ and
     of a specific starting curve did not become standard until
     [CLN16].
+  variants:
+    bsidh:
+      name:
+        short: B-SIDH
+      type: Key Exchange
+      assumptions:
+        - bsidh
+      references:
+        Cos19: 'https://eprint.iacr.org/2019/1145'
+      comment: >-
+        Variant of SIDH exploiting torsion points both on the curve and
+        its twist.
 
 sike:
   name:
@@ -60,18 +72,6 @@ sidh-prewalk:
     published mention in [BdQ+19], Section 11.1, as a possible
     countermeasure against torsion point attacks (see [Pet17]).  Also
     mentioned in [Cos21] for the same reason.
-
-bsidh:
-  name:
-    short: B-SIDH
-  type: Key Exchange
-  assumptions:
-    - bsidh
-  references:
-    Cos19: 'https://eprint.iacr.org/2019/1145'
-  comment: >-
-    Variant of SIDH exploiting torsion points both on the curve and
-    its twist.
 
 crs:
   name:
