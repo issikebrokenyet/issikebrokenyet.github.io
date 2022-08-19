@@ -201,6 +201,8 @@ parallelization:
         long: Parallelization (ordinary)
       reduces_to:
         - vector
+      references:
+        Cou06: 'https://eprint.iacr.org/2006/291'
       comment: >-
         First proposed in [Cou06].
     supersingular:

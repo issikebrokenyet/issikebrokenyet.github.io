@@ -250,34 +250,17 @@ class AssumptionVariant(Assumption):
     def __init__(self, id, props, parent):
         Assumption.__init__(self, id, props)
         self.parent = parent
-    # template = Template("""
-    # <tr id="variant-assumption-{{ this.parent }}-{{ id }}" class="hidden-row variant-row variant-assumption-{{ this.parent }}">
-    #     <td class="name">{{ this.name() }}</td>
-    #     <td class="c_sec complexity {{ this.security(False).simple() }}">
-    #     <a href="#attack-{{ this.best_attack(False).props.id }}"
-    #        title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
-    #     </td>
-    #     <td class="q_sec complexity {{ this.security().simple() }}">
-    #     <a href="#attack-{{ this.best_attack().props.id }}"
-    #        title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
-    #     </td>
-    #     <td class="reference">{{ this.reference() }}</td>
-    #     <td class="comment-checkbox">{{ this.comment_checkbox("assumption-variant") }}</td>
-    # </tr>
-    # <tr id="comment-assumption-variant-{{ id }}" class="hidden-row">
-    #     <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
-    # </tr>
-    # """)
+
     template = Template("""
     <tr id="variant-assumption-{{ this.parent }}-{{ id }}" class="hidden-row variant-row variant-assumption-{{ this.parent }}">
         <td class="name">{{ this.name() }}</td>
-        <td class="c_sec complexity ">
-        <a href="#attack-"
-           title=""></a>
+        <td class="c_sec complexity {{ this.security(False).simple() }} ">
+        <a href="#attack-{{ this.best_attack(False).props.id }}"
+           title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
         </td>
-        <td class="q_sec complexity ">
-        <a href="#attack-"
-           title=""></a>
+        <td class="q_sec complexity {{ this.security().simple() }}">
+        <a href="#attack-{{ this.best_attack().props.id }}"
+           title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
         </td>
         <td class="reference">{{ this.reference() }}</td>
         <td class="comment-checkbox">{{ this.comment_checkbox("assumption-" + this.parent) }}</td>
@@ -350,13 +333,23 @@ with open('attacks.yml') as att:
         with open('schemes.yml') as sch:
             attacks = { id : Attack(id, props)
                         for (id, props) in yaml.safe_load(att).items() }
-            assumptions = { id : Assumption(id, props)
-                             for (id, props) in yaml.safe_load(ass).items() }
+
+            # For the link, we now need to collect assumptions and
+            # assumption variants!
+            assumptions = {}
+            assumptions_variants = {}
+            for (id, props) in yaml.safe_load(ass).items():
+                assumptions[id] = Assumption(id, props)
+                for (id_variant, props_variant) in props.get("variants", {}).items():
+                    assumptions_variants[id_variant] = AssumptionVariant(id_variant, props_variant, id)
+
             schemes = { id : Scheme(id, props)
                         for (id, props) in yaml.safe_load(sch).items() }
             
             for a in assumptions.values():
                 a.link(assumptions, attacks)
+            for av in assumptions_variants.values():
+                av.link(assumptions, attacks)
             for s in schemes.values():
                 s.link(assumptions)
 
