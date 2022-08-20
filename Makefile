@@ -8,5 +8,8 @@ venv/touchfile: src/requirements.txt
 	. venv/bin/activate; pip install -Ur src/requirements.txt
 	touch venv/touchfile
 
+watch:
+	while inotifywait -e modify -r .; do $(MAKE); done
+
 clean:
 	rm -rf venv
