@@ -10,18 +10,21 @@ class L:
     Complexity function L(a,c) = exp( (c+o(1)) (log n)^a (loglog n)^(1-a) )
     """
     def __init__(self, a, c=None):
-        self.a = Fraction(a)
-        self.c = Fraction(c) if c is not None else float('inf')
+        f = lambda n: (n is None and float('inf')
+                       or type(n) == str and ('.' in n and float(n) or Fraction(n))
+                       or n)
+        self.a = f(a)
+        self.c = f(c)
 
     @classmethod
     def parse(cls, str):
-        m = re.match(r'poly(\(([\d/]+)\))?$', str)
+        m = re.match(r'poly(\((\d+([./]\d+)?)\))?$', str)
         if m:
             return cls(0, m.group(2))
-        m = re.match(r'L\(([\d/]+)(,([\d/]+))?\)$', str)
+        m = re.match(r'L\((\d+([./]\d+)?)(,(\d+([./]\d+)?))?\)$', str)
         if m:
-            return cls(m.group(1), m.group(3))
-        m = re.match(r'exp(\(([\d/.]+)\))?$', str)
+            return cls(m.group(1), m.group(4))
+        m = re.match(r'exp(\((\d+([./]\d+)?)\))?$', str)
         if m:
             return cls(1, m.group(2))
         raise RuntimeError('Cannot parse %s as a complexity' % str)
@@ -53,10 +56,10 @@ class L:
     def simple(self):
         if self.a == 0:
             return 'poly'
-        elif self.a == 1:
-            return 'exp'
-        else:
+        elif self.a < 1:
             return 'subexp'
+        else:
+            return 'exp'
 
 #----------------------------------------------#
 # A utility class to easily access subvariants #
