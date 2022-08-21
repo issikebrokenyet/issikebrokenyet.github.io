@@ -112,3 +112,13 @@ galbraith:
   comment: >-
     Random walk based algorithm to find an isogeny path between
     curves. [GHS01] is a more memory efficient version of [Gal99].
+
+dartois-de-feo:
+  name:
+    long: Dartois-De Feo
+  complexity: exp(0.292)
+  references:
+    DD21: 'https://eprint.iacr.org/2021/1681'
+  comment: >-
+    Despite the exponential complexity, practically breaks proposed
+    [#scheme-osidh](OSIDH) parameters.

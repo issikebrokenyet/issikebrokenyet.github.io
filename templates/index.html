@@ -87,7 +87,7 @@
     commentCheckboxes.forEach(function(checkbox) {
       checkbox.addEventListener('change', function() {
         const checkboxId = this.id;
-        const commentId = checkboxId.replace("-checkbox", "");
+        const commentId = checkboxId.replace("!checkbox", "");
         const commentEle = document.getElementById(commentId);
         commentEle.classList.toggle("hidden-row");
       })
@@ -100,7 +100,7 @@
     variantCheckboxes.forEach(function(checkbox) {
       checkbox.addEventListener('change', function() {
         const checkboxId = this.id;
-        const variantClassName = checkboxId.replace("-checkbox", "");
+        const variantClassName = checkboxId.replace("!checkbox", "");
         var variantElements = document.getElementsByClassName(variantClassName);
 
         Array.prototype.forEach.call(variantElements, function(variantElement) {
@@ -108,8 +108,8 @@
           
           // Nasty hack so that if a variant is hidden while a comment is open
           // We close the comment.
-          commentId = "comment-" + variantElement.id.replace("variant-", "")
-          commentCheckboxId = commentId + "-checkbox";
+          commentId = "comment-" + variantElement.id
+          commentCheckboxId = commentId + "!checkbox";
 
           // Grab the comment
           variantComment = document.getElementById(commentId);

@@ -81,7 +81,7 @@ crs:
     - Key Exchange
     - Non Interactive Key Exchange
   assumptions:
-    - parallelization
+    - parallelization>ordinary
   references:
     Cou06: 'https://eprint.iacr.org/2006/291'
     RS06: 'https://eprint.iacr.org/2006/145'
@@ -100,7 +100,7 @@ csidh:
     - Key Exchange
     - Non Interactive Key Exchange
   assumptions:
-    - parallelization-ss
+    - parallelization>supersingular
   references:
     CL+18: 'https://eprint.iacr.org/2018/383'
     CD19: 'https://eprint.iacr.org/2019/1404'
@@ -110,17 +110,17 @@ csidh:
     proposal with $p = 3 \bmod 8$ in [CL+18], minor variant wiht $p =
     7 \bmod 8$ in [CD19].
 
-# osidh:
-#   name:
-#     short: OSIDH
-#     long: Oriented SIDH
-#   type:
-#     - Key Exchange
-#     - Non Interactive Key Exchange
-#   assumptions:
-#     - parallelization-osidh
-#   references:
-#     CK20: 'https://eprint.iacr.org/2020/985'
-#   comment: >-
-#     Variant of CRS/CSIDH based on the action of a class group on a set
-#     of supersingular curves reached by "volcano descent".
+osidh:
+  name:
+    short: OSIDH
+    long: Oriented SIDH
+  type:
+    - Key Exchange
+    - Non Interactive Key Exchange
+  assumptions:
+    - parallelization>oriented
+  references:
+    CK20: 'https://eprint.iacr.org/2020/985'
+  comment: >-
+    Variant of CRS/CSIDH based on the action of a class group on a set
+    of supersingular curves reached by "volcano descent".
