@@ -3,7 +3,8 @@ from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
 from fractions import Fraction
 import markdown
 import re
-from functools import cached_property
+from functools import cached_property, cache
+import inspect
 
 class L:
     """
@@ -61,11 +62,12 @@ class L:
         else:
             return 'exp'
 
-#----------------------------------------------#
-# A utility class to easily access subvariants #
-#----------------------------------------------#
+#--------------------#
+# Some utility stuff #
+#--------------------#
 
 class NestedDict(dict):
+    'A utility class to easily access subvariants'
     def __getitem__(self, key):
         if ">" in key:
             parent, variant = key.split(">", maxsplit=1)
@@ -73,6 +75,23 @@ class NestedDict(dict):
         else:
             return super().__getitem__(key)
 
+def norecloop(default=None):
+    'A decorator to break out of recursion loops for methods (based on self)'
+    def decorator(met):
+        def wrapper(self, *args, **kwds):
+            stack = inspect.stack()
+            current = stack.pop(0)
+            frames = [inspect.getargvalues(s.frame)
+                      for s in stack if s.function == current.function]
+            if any(f.locals['self'] is self for f in frames):
+                return default
+            else:
+                return met(self, *args, **kwds)
+
+        return wrapper
+
+    return decorator
+    
 #----------------------------------#
 # Main Class for Rows in our table #
 #----------------------------------#
@@ -184,18 +203,7 @@ class Attack(Entry):
 
     @cached_property
     def complexity(self):
-        return L.parse(self.props['complexity'])
-
-class Trivial(Attack):
-    def __init__(self):
-        self.id = 'trivial'
-        self.props = { 'name': 'trivial' }
-
-    @property
-    def complexity(self):
-        return L(10)
-trivial = Trivial()
-    
+        return L.parse(self.props['complexity'])    
 
 #----------------------------------------------#
 # Logic for Assumption and Assumption variants #
@@ -269,24 +277,35 @@ class Assumption(Entry):
             for variant in self.props["variants"].values():
                 variant.link(assumptions, attacks)
 
-    def best_attack(self, quantum=True, excl=None):
-        ba1 = min((a
-                   for a in self.props.get('attacks', [])
-                   if not a.quantum or quantum),
-                  key=lambda a: a.complexity,
-                  default=trivial)
-        excl = ([] if excl is None else excl) + [self]
-        ba2 = min((a.best_attack(quantum, excl)
-                   for a in self.props.get('reduces_to', [])
-                   if a not in excl),
-                  key=lambda a: a.complexity,
-                  default=trivial)
-        if ba1 is Trivial:
-            return ba2
-        elif ba2 is Trivial:
-            return ba1
-        else:
-            return min([ba1, ba2], key=lambda a: a.complexity)
+    @norecloop([])
+#    @cache
+    def attacks(self, quantum=True):
+        # Any attack on parent is also an attack on us
+        attacks = self.parent.attacks(quantum) if self.parent is not None else []
+        # Attacks explicitly listed
+        attacks += [a for a in self.props.get('attacks', []) if not a.quantum or quantum]
+        # Attacks on weaker assumptions are attacks on us
+        for a in self.props.get('reduces_to', []):
+            attacks += a.attacks(quantum)
+        # todo: handle quantum reductions
+        #
+        # And now the most controversial one:
+        # if the parent has a generic reduction, specialize it
+        # (assumes a single level of nesting)
+        #
+        # todo: why does this break caching?
+        if self.parent is not None:
+            for a in self.parent.props.get('reduces_to', []):
+                sibling = a.props.get('variants', dict()).get(self.props['id'])
+                if sibling:
+                    attacks += sibling.attacks(quantum)
+
+        return attacks
+        
+
+    def best_attack(self, quantum=True):
+        return min(self.attacks(quantum),
+                   key=lambda a: a.complexity)
         
     def security(self, quantum=True):
         return self.best_attack(quantum).complexity
