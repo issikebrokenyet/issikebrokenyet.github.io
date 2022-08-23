@@ -3,7 +3,7 @@ from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
 from fractions import Fraction
 import markdown
 import re
-from functools import cached_property, cache
+from functools import cached_property
 import inspect
 
 class L:
@@ -205,6 +205,19 @@ class Attack(Entry):
     def complexity(self):
         return L.parse(self.props['complexity'])    
 
+
+class QReduction(Attack):
+    '''
+    A quantum reduction wrapping a (classical) attack.
+
+    Only used during attack resolution.
+    '''
+    quantum = True
+
+    def __init__(self, attack):
+        self.oracle = attack
+        self.props = attack.props
+
 #----------------------------------------------#
 # Logic for Assumption and Assumption variants #
 #----------------------------------------------#
@@ -277,34 +290,34 @@ class Assumption(Entry):
             for variant in self.props["variants"].values():
                 variant.link(assumptions, attacks)
 
-    @norecloop([])
-#    @cache
-    def attacks(self, quantum=True):
+    @norecloop(set())
+    def attacks(self, cache=True):
+        if hasattr(self, '_attacks'):
+            return self._attacks
         # Any attack on parent is also an attack on us
-        attacks = self.parent.attacks(quantum) if self.parent is not None else []
+        attacks = self.parent.attacks(False) if self.parent is not None else set()
         # Attacks explicitly listed
-        attacks += [a for a in self.props.get('attacks', []) if not a.quantum or quantum]
+        attacks = attacks.union(a for a in self.props.get('attacks', set()))
         # Attacks on weaker assumptions are attacks on us
         for a in self.props.get('reduces_to', []):
-            attacks += a.attacks(quantum)
+            attacks = attacks.union(a.attacks(False))
         # todo: handle quantum reductions
         #
         # And now the most controversial one:
         # if the parent has a generic reduction, specialize it
         # (assumes a single level of nesting)
-        #
-        # todo: why does this break caching?
         if self.parent is not None:
             for a in self.parent.props.get('reduces_to', []):
                 sibling = a.props.get('variants', dict()).get(self.props['id'])
                 if sibling:
-                    attacks += sibling.attacks(quantum)
+                    attacks = attacks.union(sibling.attacks(False))
 
+        if cache:
+            self._attacks = attacks
         return attacks
-        
 
     def best_attack(self, quantum=True):
-        return min(self.attacks(quantum),
+        return min((a for a in self.attacks() if quantum or not a.quantum),
                    key=lambda a: a.complexity)
         
     def security(self, quantum=True):
