@@ -137,7 +137,8 @@ abbr[title=""] {
 }
 
 .hidden-row{
-    visibility: collapse;
+/*     visibility: collapse; */
+    display: none;
 }
 
 .complexity.exp {
