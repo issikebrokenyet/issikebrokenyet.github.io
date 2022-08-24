@@ -148,11 +148,22 @@ abbr[title=""] {
 /*
   Checkbox styling
 */
+input[type="checkbox"]{
+    display: none;
+}
 input[type="checkbox"] + label{
     color: var(--dimmed-text);
+    cursor: pointer;
 }
-input[type="checkbox"]:checked + label{
+input[type="checkbox"]:checked + label, input[type="checkbox"]:hover + label{
     color: var(--text);
+}
+input[type="checkbox"] + label > .chevron{
+    display: inline-block;
+    transition: transform .7s;
+}
+input[type="checkbox"]:checked + label > .chevron{
+    transform: rotate(90deg);
 }
 
 .complexity.exp {

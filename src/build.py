@@ -137,14 +137,14 @@ class Entry:
     def comment_checkbox(self, table):
         if self.props.get("comment"):
             input_ele = f'<input type="checkbox" name="comment-checkbox" id="comment-{table}:{self.longid}!checkbox">'
-            label_ele = f'<label for="comment-{table}:{self.longid}!checkbox">Comments</label>'
+            label_ele = f'<label for="comment-{table}:{self.longid}!checkbox"><span class="chevron">&#x25B8;</span>&nbsp;Comments</label>'
             return f"{input_ele}\n{label_ele}"
         return "-"
 
     def variant_checkbox(self, table):
         if self.props.get("variants"):
             input_ele =  f'<input type="checkbox" name="variant-checkbox" id="variant-{table}:{self.longid}!checkbox">'
-            label_ele = f'<label for="variant-{table}:{self.longid}!checkbox">Variants</label>'
+            label_ele = f'<label for="variant-{table}:{self.longid}!checkbox"><span class="chevron">&#x25B8;</span>&nbsp;Variants</label>'
             return f"<br>{input_ele}\n{label_ele}"
         return ""
 
