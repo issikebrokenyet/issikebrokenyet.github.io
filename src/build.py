@@ -136,16 +136,14 @@ class Entry:
 
     def comment_checkbox(self, table):
         if self.props.get("comment"):
-            input_ele = f'<input type="checkbox" name="comment-checkbox" id="comment-{table}:{self.longid}!checkbox">'
-            label_ele = f'<label for="comment-{table}:{self.longid}!checkbox">Comments</label>'
-            return f"{input_ele}\n{label_ele}"
+            button_ele = f'<button id="comment-{table}:{self.longid}!button" class="toggle-button cbtn">Comment</button>'
+            return button_ele
         return "-"
 
-    def variant_checkbox(self, table):
+    def variant_button(self, table):
         if self.props.get("variants"):
-            input_ele =  f'<input type="checkbox" name="variant-checkbox" id="variant-{table}:{self.longid}!checkbox">'
-            label_ele = f'<label for="variant-{table}:{self.longid}!checkbox">Variants</label>'
-            return f"<br>{input_ele}\n{label_ele}"
+            button_ele =  f'<button id="variant-{table}:{self.longid}!button" class="toggle-button vbtn">Variants</button>'
+            return f"<br>{button_ele}"
         return ""
 
     def reference_in_comment(self, comment):
@@ -265,19 +263,22 @@ class Assumption(Entry):
         <td class="reference">{{ this.reference }}</td>
         <td class="checkboxes">
             {{ this.comment_checkbox("assumption") }}
-            {{ this.variant_checkbox("assumption") }}
         </td>
     </tr>
     <tr id="comment-assumption:{{ this.longid }}" class="hidden-row">
         <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment}}</td>
     </tr>
     {% if this.props.variants %}
+        <tr>
+          <td colspan="5" class="variant-cell">
+            {{ this.variant_button("assumption") }}
+          </td>
+        </tr>
         {% for variant in this.props.variants.values() %}
-            {{ variant }}
+                {{ variant }}
         {% endfor%}
     {% endif%}
     {% if this.props.variants|length % 2 == 1 %}
-        <tr class="hidden-row"><td colspan="5"></td></tr>
         <tr class="hidden-row"><td colspan="5"></td></tr>
     {% endif %}
     """)
@@ -344,7 +345,7 @@ class Scheme(Entry):
     """
     template = Template("""
     <tr id="scheme:{{ this.longid }}"
-        {% if this.parent %} class="variant-row
+        {% if this.parent %} class="hidden-row variant-row
             variant-scheme:{{ this.parent.longid }}" {% endif %}>
         <td class="name">{{ this.name }}</td>
         <td class="type">{{ this.format_type() }}</td>
@@ -365,22 +366,18 @@ class Scheme(Entry):
         <td colspan="6" class="comment-cell"><h4>Comment</h4>{{this.comment}}</td>
     </tr>
     {% if this.props.variants %}
-    <tr>
-      <td colspan="6" class="variant-cell">
-        <details>
-            <summary class="variant-summary">
-                Variants
-            </summary>
-            <table class="variant-table">
-            {% for variant in this.props.variants.values() %}
+        <tr>
+          <td colspan="6" class="variant-cell">
+            {{ this.variant_button("scheme") }}
+          </td>
+        </tr>
+        {% for variant in this.props.variants.values() %}
                 {{ variant }}
-            {% endfor%}
-            </table>
-        </details>
-      </td>
-    </tr>
-    <tr class="hidden-row"></tr>
+        {% endfor%}
     {% endif%}
+    {% if this.props.variants|length % 2 == 1 %}
+        <tr class="hidden-row"><td colspan="5"></td></tr>
+    {% endif %}
     """)
 
     def link(self, assumptions):

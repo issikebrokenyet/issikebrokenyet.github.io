@@ -78,6 +78,7 @@ table {
     margin-bottom: 3em;
     width: -moz-available;
     width: -webkit-fill-available;
+    overflow: hidden;
 }
 th, td {
     padding: 13px 15px 11px 15px;
@@ -97,7 +98,7 @@ tr:target {
     background-color: var(--target-highlight);
 }
 tr.variant-row td:first-child{
-    /*text-indent: 12px;*/
+    text-indent: 18px;
     box-shadow: inset 3px 0px 0px 0px var(--blue);
 }
 tr.variant-row:nth-child(4n+1),
@@ -112,21 +113,34 @@ td a {
     color: inherit;
 }
 .hidden-row{
-    display: none;
+    visibility: collapse;
 }
 
-td.variant-cell{
-    padding: 0;
-}
-.variant-table{
-    margin: 0;   
-}
-.variant-summary{
-    padding: 8px 12px;
-    background-color: var(--variant-highlight-alt);
+
+.variant-cell{
+    padding: 6px 15px;
+    line-height: 4px;
+    background-color: var(--variant-highlight);
     box-shadow: inset 3px 0px 0px 0px var(--blue);
-
 }
+.toggle-button{
+    border: none;
+    background-color: inherit;
+    font-size: inherit;
+    padding: 0;
+    cursor: pointer;
+}
+.toggle-button::before{
+    content: "▵";
+    transform: rotate(90deg);
+    display: inline-block;
+    margin-right: 6px;
+    transition: transform 0.3s ease;
+}
+.toggle-button[aria-expanded]::before{
+    transform: rotate(180deg);
+}
+
 
 /*
   Comment styling
