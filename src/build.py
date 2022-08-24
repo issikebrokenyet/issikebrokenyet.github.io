@@ -344,7 +344,7 @@ class Scheme(Entry):
     """
     template = Template("""
     <tr id="scheme:{{ this.longid }}"
-        {% if this.parent %} class="hidden-row variant-row
+        {% if this.parent %} class="variant-row
             variant-scheme:{{ this.parent.longid }}" {% endif %}>
         <td class="name">{{ this.name }}</td>
         <td class="type">{{ this.format_type() }}</td>
@@ -359,21 +359,28 @@ class Scheme(Entry):
         <td class="reference">{{ this.reference }}</td>
         <td class="checkboxes">
             {{ this.comment_checkbox("scheme") }}
-            {{ this.variant_checkbox("scheme") }}
         </td>
     </tr>
     <tr id="comment-scheme:{{ this.longid }}" class="hidden-row">
         <td colspan="6" class="comment-cell"><h4>Comment</h4>{{this.comment}}</td>
     </tr>
     {% if this.props.variants %}
-        {% for variant in this.props.variants.values() %}
-            {{ variant }}
-        {% endfor%}
+    <tr>
+      <td colspan="6" class="variant-cell">
+        <details>
+            <summary class="variant-summary">
+                Variants
+            </summary>
+            <table class="variant-table">
+            {% for variant in this.props.variants.values() %}
+                {{ variant }}
+            {% endfor%}
+            </table>
+        </details>
+      </td>
+    </tr>
+    <tr class="hidden-row"></tr>
     {% endif%}
-    {% if this.props.variants|length % 2 == 1 %}
-        <tr class="hidden-row"><td colspan="6"></td></tr>
-        <tr class="hidden-row"><td colspan="6"></td></tr>
-    {% endif %}
     """)
 
     def link(self, assumptions):

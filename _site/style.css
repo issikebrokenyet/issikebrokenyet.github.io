@@ -97,7 +97,7 @@ tr:target {
     background-color: var(--target-highlight);
 }
 tr.variant-row td:first-child{
-    text-indent: 12px;
+    /*text-indent: 12px;*/
     box-shadow: inset 3px 0px 0px 0px var(--blue);
 }
 tr.variant-row:nth-child(4n+1),
@@ -114,6 +114,20 @@ td a {
 .hidden-row{
     display: none;
 }
+
+td.variant-cell{
+    padding: 0;
+}
+.variant-table{
+    margin: 0;   
+}
+.variant-summary{
+    padding: 8px 12px;
+    background-color: var(--variant-highlight-alt);
+    box-shadow: inset 3px 0px 0px 0px var(--blue);
+
+}
+
 /*
   Comment styling
 */
