@@ -206,17 +206,20 @@ class Attack(Entry):
         return L.parse(self.props['complexity'])    
 
 
-class QReduction(Attack):
+class Reduction(Attack):
     '''
-    A quantum reduction wrapping a (classical) attack.
+    A reduction wrapping an attack.
 
     Only used during attack resolution.
     '''
-    quantum = True
-
-    def __init__(self, attack):
+    def __init__(self, attack, quantum):
         self.oracle = attack
+        self._quantum = quantum
         self.props = attack.props
+
+    @property
+    def quantum(self):
+        return self._quantum or self.oracle.quantum
 
 #----------------------------------------------#
 # Logic for Assumption and Assumption variants #
@@ -284,8 +287,9 @@ class Assumption(Entry):
             self.props['attacks'] = [attacks[a]
                                      for a in self.props['attacks']]
         if 'reduces_to' in self.props:
-            self.props['reduces_to'] = [assumptions[a]
-                                        for a in self.props['reduces_to']]
+            self.props['reduces_to'] = {a: { 'obj': assumptions[a],
+                                             **(props or {}) }
+                                        for a, props in self.props['reduces_to'].items()}
         if 'variants' in self.props:
             for variant in self.props["variants"].values():
                 variant.link(assumptions, attacks)
@@ -299,18 +303,18 @@ class Assumption(Entry):
         # Attacks explicitly listed
         attacks = attacks.union(a for a in self.props.get('attacks', set()))
         # Attacks on weaker assumptions are attacks on us
-        for a in self.props.get('reduces_to', []):
-            attacks = attacks.union(a.attacks(False))
-        # todo: handle quantum reductions
-        #
+        for a in self.props.get('reduces_to', {}).values():
+            attacks = attacks.union(Reduction(att, a.get('quantum', False))
+                                    for att in a['obj'].attacks(False))
         # And now the most controversial one:
         # if the parent has a generic reduction, specialize it
         # (assumes a single level of nesting)
         if self.parent is not None:
-            for a in self.parent.props.get('reduces_to', []):
-                sibling = a.props.get('variants', dict()).get(self.props['id'])
+            for a in self.parent.props.get('reduces_to', {}).values():
+                sibling = a['obj'].props.get('variants', dict()).get(self.props['id'])
                 if sibling:
-                    attacks = attacks.union(sibling.attacks(False))
+                    attacks = attacks.union(Reduction(att, a.get('quantum', False))
+                                            for att in sibling.attacks(False))
 
         if cache:
             self._attacks = attacks
