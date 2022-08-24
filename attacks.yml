@@ -37,7 +37,7 @@ vow:
 castryck-decru:
   name:
     long: Castryck-Decru
-  complexity: poly
+  complexity: poly(3)
   references:
     CD22: "https://eprint.iacr.org/2022/975"
   comment: >-
@@ -58,7 +58,7 @@ castryck-decru-maino-martindale:
 robert:
   name:
     long: Robert
-  complexity: poly
+  complexity: poly(8)
   references:
     Rob22: "https://eprint.iacr.org/2022/1038"
   comment: >-

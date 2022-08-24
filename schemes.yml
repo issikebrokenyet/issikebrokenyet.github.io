@@ -16,17 +16,37 @@ sidh:
     of a specific starting curve did not become standard until
     [CLN16].
   variants:
-    bsidh:
+    sidh-random:
       name:
-        short: B-SIDH
+        long: SIDH with random starting curve
       type: Key Exchange
       assumptions:
-        - bsidh
+        - cssi
       references:
-        Cos19: 'https://eprint.iacr.org/2019/1145'
+        Pet17: 'https://eprint.iacr.org/2017/571'
+        BB+22: 'https://eprint.iacr.org/2022/518'
       comment: >-
-        Variant of SIDH exploiting torsion points both on the curve and
-        its twist.
+        Folklore version SIDH, starting from a random curve of unknown
+        endomorphism ring.  First published mention in [Pet17],
+        however it is currently not known how to generate such a curve
+        without a trusted setup (see [BB+22]).
+    sidh-prewalk:
+      name:
+        long: SIDH with initial secret walk
+      type: Key Exchange
+      assumptions:
+        - cssi
+      references:
+        Pet17: 'https://eprint.iacr.org/2017/571'
+        BdQ+19: 'https://eprint.iacr.org/2019/1333'
+        Cos21: 'https://eprint.iacr.org/2021/543'
+      comment: >-
+        Folklore version of SIDH where the initiator (Alice) selects a
+        random starting curve before starting the key exchange, and
+        transmits it along with its public key.  First published
+        mention in [BdQ+19], Section 11.1, as a possible
+        countermeasure against torsion point attacks (see [Pet17]).
+        Also mentioned in [Cos21] for the same reason.
 
 sike:
   name:
@@ -41,37 +61,17 @@ sike:
     Candidate to the NIST Post-Quantum Standardization process until
     the 4th round.
 
-sidh-random:
+bsidh:
   name:
-    long: SIDH with random starting curve
+    short: B-SIDH
   type: Key Exchange
   assumptions:
-    - cssi-random
+    - bsidh
   references:
-    Pet17: 'https://eprint.iacr.org/2017/571'
-    BB+22: 'https://eprint.iacr.org/2022/518'
+    Cos19: 'https://eprint.iacr.org/2019/1145'
   comment: >-
-    Folklore version SIDH, starting from a random curve of unknown
-    endomorphism ring.  First published mention in [Pet17], however it
-    is currently not known how to generate such a curve without a
-    trusted setup (see [BB+22]).
-
-sidh-prewalk:
-  name:
-    long: SIDH with initial secret walk
-  type: Key Exchange
-  assumptions:
-    - cssi-random
-  references:
-    Pet17: 'https://eprint.iacr.org/2017/571'
-    BdQ+19: 'https://eprint.iacr.org/2019/1333'
-    Cos21: 'https://eprint.iacr.org/2021/543'
-  comment: >-
-    Folklore version of SIDH where the initiator (Alice) selects a
-    random starting curve before starting the key exchange.  First
-    published mention in [BdQ+19], Section 11.1, as a possible
-    countermeasure against torsion point attacks (see [Pet17]).  Also
-    mentioned in [Cos21] for the same reason.
+    More compact variant of SIDH exploiting torsion points both on the
+    curve and its twist.
 
 crs:
   name:
