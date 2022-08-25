@@ -97,7 +97,9 @@ tbody:nth-child(odd){
 tr.header-row{
     background-color: var(--background);
 }
-tr:target {
+/* tripling class .variant-row for precedence */
+tr:target,
+tr.variant-row.variant-row.variant-row:target {
     background-color: var(--target-highlight);
 }
 tbody.has_variants tr {
@@ -129,12 +131,12 @@ tbody:nth-child(odd) tr.variant-row:nth-child(4n+4)
 td a {
     color: inherit;
 }
-tr.hidden-row{
+:not(:target).hidden-row {
     visibility: collapse;
     transition: transform 0.3s;
     transform: scaleY(0);
 }
-.hidden-row td {
+:not(:target).hidden-row td {
     padding-top: 0;
     padding-bottom: 0;
 }
