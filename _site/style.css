@@ -84,6 +84,8 @@ table {
 th, td {
     padding: 13px 15px 11px 15px;
     transition: padding 0.3s ease;
+    position: relative;
+    line-height: 1.25;
 }
 th{
     border-bottom: solid 2px var(--cell-border);
@@ -123,12 +125,14 @@ tbody:nth-child(odd) tr.variant-row:nth-child(4n+4)
 {
     background-color: var(--variant-highlight-alt);
 }
+
 td a {
     color: inherit;
 }
-.hidden-row{
+tr.hidden-row{
     visibility: collapse;
-    transition: visibility 0.3s;
+    transition: transform 0.3s;
+    transform: scaleY(0);
 }
 .hidden-row td {
     padding-top: 0;
@@ -148,6 +152,8 @@ td a {
     font-size: inherit;
     padding: 0;
     cursor: pointer;
+    min-width: 1.5em;
+    color: var(--text);
 }
 .toggle-button::before{
     content: "▵";
@@ -156,10 +162,23 @@ td a {
     display: inline-block;
     margin-right: 6px;
     transition: transform 0.3s ease;
+    box-sizing:border-box;
+    color: var(--text);
 }
 .toggle-button[aria-expanded]::before{
     transform: rotate(180deg);
     transform-origin: center;
+}
+.vbtn{
+    z-index: 2;
+    margin-right: -16px;
+    padding-right: 10px;
+    position: relative;
+    text-align: end;
+}
+.vbtn::before{
+    position: relative;
+    z-index: 1;
 }
 .has_variants label {
     cursor: pointer;

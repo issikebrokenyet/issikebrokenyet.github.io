@@ -241,13 +241,13 @@ class Assumption(Entry):
     """
     header = """
     <thead><tr>
-      <th class="variant-cell"><!-- variant button --></th>
+      <th class="variant-cell" width="10"><!-- variant button --></th>
       <th>Name</th>
       <th>Classical Security</th>
       <th>Quantum Security</th>
       <th>Reference</th>
       <th>Additional Information</th>
-    </tr></thead?
+    </tr></thead>
     """
     template = Template("""
     {% if not this.parent %}<tbody class="{% if this.props.variants %}has_variants{% endif %}">{% endif %}
