@@ -6,7 +6,8 @@ html[data-theme='light']{
     --red: #cf222e;
     --orange: #ffa700;
     --green: #2da44e;
-    --blue: #0969da;
+    --blue: #6d9dd5;
+    --bluer: #0969da;
     --link: #0969da;
     --link-visited: #9963ff;
     --highlight: #f6f8fa;
@@ -82,13 +83,13 @@ table {
 }
 th, td {
     padding: 13px 15px 11px 15px;
+    transition: padding 0.3s ease;
 }
 th{
     border-bottom: solid 2px var(--cell-border);
     text-align: left;
 }
-tr:nth-child(4n+3),
-tr:nth-child(4n+4){
+tbody:nth-child(odd){
     background-color: var(--highlight);
 }
 tr.header-row{
@@ -97,16 +98,29 @@ tr.header-row{
 tr:target {
     background-color: var(--target-highlight);
 }
-tr.variant-row td:first-child{
-    text-indent: 18px;
+tbody.has_variants tr {
     box-shadow: inset 3px 0px 0px 0px var(--blue);
 }
-tr.variant-row:nth-child(4n+1),
-tr.variant-row:nth-child(4n+2){
+tbody:nth-child(odd).has_variants tr {
+    box-shadow: inset 3px 0px 0px 0px var(--bluer);
+}
+tbody.has_variants  {
+    border-bottom: solid 2px var(--blue);
+}
+tbody:nth-child(odd).has_variants {
+    border-bottom: solid 2px var(--bluer);
+}
+tr.variant-row td:first-child{
+    text-indent: 18px;
+}
+tr.variant-row {
     background-color: var(--variant-highlight);
 }
-tr.variant-row:nth-child(4n+3),
-tr.variant-row:nth-child(4n+4){
+tbody:nth-child(even) tr.variant-row:nth-child(4n+1),
+tbody:nth-child(even) tr.variant-row:nth-child(4n+2),
+tbody:nth-child(odd) tr.variant-row:nth-child(4n+3),
+tbody:nth-child(odd) tr.variant-row:nth-child(4n+4)
+{
     background-color: var(--variant-highlight-alt);
 }
 td a {
@@ -114,14 +128,19 @@ td a {
 }
 .hidden-row{
     visibility: collapse;
+    transition: visibility 0.3s;
+}
+.hidden-row td {
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
-
 .variant-cell{
-    padding: 6px 15px;
+    padding-right: 0;
     line-height: 4px;
-    background-color: var(--variant-highlight);
-    box-shadow: inset 3px 0px 0px 0px var(--blue);
+}
+.variant-cell button{
+    width: 0;
 }
 .toggle-button{
     border: none;
@@ -133,14 +152,18 @@ td a {
 .toggle-button::before{
     content: "▵";
     transform: rotate(90deg);
+    transform-origin: center;
     display: inline-block;
     margin-right: 6px;
     transition: transform 0.3s ease;
 }
 .toggle-button[aria-expanded]::before{
     transform: rotate(180deg);
+    transform-origin: center;
 }
-
+.has_variants label {
+    cursor: pointer;
+}
 
 /*
   Comment styling

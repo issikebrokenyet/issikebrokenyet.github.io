@@ -142,8 +142,7 @@ class Entry:
 
     def variant_button(self, table):
         if self.props.get("variants"):
-            button_ele =  f'<button id="variant-{table}:{self.longid}!button" class="toggle-button vbtn">Variants</button>'
-            return f"<br>{button_ele}"
+            return  f'<button id="variant-{table}:{self.longid}!button" class="toggle-button vbtn"></button>'
         return ""
 
     def reference_in_comment(self, comment):
@@ -172,15 +171,16 @@ class Entry:
 
 class Attack(Entry):
     header = """
-    <tr class="header-row">
+    <thead><tr class="header-row">
       <th>Name</th>
       <th>Complexity</th>
       <th>Quantum?</th>
       <th>Reference</th>
       <th>Additional Information</th>
-    </tr>
+    </tr></thead>
     """
     template = Template("""
+    {% if not this.parent %}<tbody>{% endif %}
     <tr id="attack:{{ this.longid }}"
         class="quantum-{{ quantum | default(false) }}
         complexity">
@@ -193,6 +193,7 @@ class Attack(Entry):
     <tr id="comment-attack:{{ this.longid }}" class="hidden-row">
         <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment}}</td>
     </tr>
+    {% if not this.parent %}</tbody>{% endif %}
     """)
 
     @property
@@ -239,19 +240,22 @@ class Assumption(Entry):
     This is done in Schemes too
     """
     header = """
-    <tr>
+    <thead><tr>
+      <th class="variant-cell"><!-- variant button --></th>
       <th>Name</th>
       <th>Classical Security</th>
       <th>Quantum Security</th>
       <th>Reference</th>
       <th>Additional Information</th>
-    </tr>
+    </tr></thead?
     """
     template = Template("""
+    {% if not this.parent %}<tbody class="{% if this.props.variants %}has_variants{% endif %}">{% endif %}
     <tr id="assumption:{{ this.longid }}"
         {% if this.parent %} class="hidden-row variant-row
             variant-assumption:{{ this.parent.longid }}" {% endif %}>
-        <td class="name">{{ this.name }}</td>
+        <td class="variant-cell">{{ this.variant_button("assumption") }}</td>
+        <td class="name"><label for="variant-assumption:{{ this.longid }}!button">{{ this.name }}</label></td>
         <td class="c_sec complexity {{ this.security(False).simple() }}">
         <a href="#attack:{{ this.best_attack(False).longid }}"
            title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
@@ -266,21 +270,14 @@ class Assumption(Entry):
         </td>
     </tr>
     <tr id="comment-assumption:{{ this.longid }}" class="hidden-row">
-        <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment}}</td>
+        <td colspan="6" class="comment-cell"><h4>Comment</h4>{{this.comment}}</td>
     </tr>
     {% if this.props.variants %}
-        <tr>
-          <td colspan="5" class="variant-cell">
-            {{ this.variant_button("assumption") }}
-          </td>
-        </tr>
         {% for variant in this.props.variants.values() %}
                 {{ variant }}
         {% endfor%}
     {% endif%}
-    {% if this.props.variants|length % 2 == 1 %}
-        <tr class="hidden-row"><td colspan="5"></td></tr>
-    {% endif %}
+    {% if not this.parent %}</tbody>{% endif %}
     """)
 
     def link(self, assumptions, attacks):
@@ -334,20 +331,23 @@ class Assumption(Entry):
 
 class Scheme(Entry):
     header = """
-    <tr>
+    <thead><tr>
+      <th class="variant-cell"><!-- variant button --></th>
       <th>Name</th>
       <th>Type</th>
       <th>Classical Security</th>
       <th>Quantum Security</th>
       <th>Reference</th>
       <th>Additional Information</th>
-    </tr>
+    </tr></thead>
     """
     template = Template("""
+    {% if not this.parent %}<tbody class="{% if this.props.variants %}has_variants{% endif %}">{% endif %}
     <tr id="scheme:{{ this.longid }}"
         {% if this.parent %} class="hidden-row variant-row
             variant-scheme:{{ this.parent.longid }}" {% endif %}>
-        <td class="name">{{ this.name }}</td>
+        <td class="variant-cell">{{ this.variant_button("scheme") }}</td>
+        <td class="name"><label for="variant-scheme:{{ this.longid }}!button">{{ this.name }}</label></td>
         <td class="type">{{ this.format_type() }}</td>
         <td class="c_sec complexity {{ this.security(False).simple() }}">
         <a href="#attack:{{ this.best_attack(False).longid }}"
@@ -363,21 +363,14 @@ class Scheme(Entry):
         </td>
     </tr>
     <tr id="comment-scheme:{{ this.longid }}" class="hidden-row">
-        <td colspan="6" class="comment-cell"><h4>Comment</h4>{{this.comment}}</td>
+        <td colspan="7" class="comment-cell"><h4>Comment</h4>{{this.comment}}</td>
     </tr>
     {% if this.props.variants %}
-        <tr>
-          <td colspan="6" class="variant-cell">
-            {{ this.variant_button("scheme") }}
-          </td>
-        </tr>
         {% for variant in this.props.variants.values() %}
                 {{ variant }}
         {% endfor%}
     {% endif%}
-    {% if this.props.variants|length % 2 == 1 %}
-        <tr class="hidden-row"><td colspan="5"></td></tr>
-    {% endif %}
+    {% if not this.parent %}</tbody>{% endif %}
     """)
 
     def link(self, assumptions):
