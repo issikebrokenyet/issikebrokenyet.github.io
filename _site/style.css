@@ -140,11 +140,9 @@ tr.hidden-row{
 }
 
 .variant-cell{
-    padding-right: 0;
     line-height: 4px;
-}
-.variant-cell button{
-    width: 0;
+    margin-inline-end: -15px;
+    text-align: end;
 }
 .toggle-button{
     border: none;
@@ -152,7 +150,6 @@ tr.hidden-row{
     font-size: inherit;
     padding: 0;
     cursor: pointer;
-    min-width: 1.5em;
     color: var(--text);
 }
 .toggle-button::before{
@@ -160,7 +157,7 @@ tr.hidden-row{
     transform: rotate(90deg);
     transform-origin: center;
     display: inline-block;
-    margin-right: 6px;
+    margin-inline-end: 6px;
     transition: transform 0.3s ease;
     box-sizing:border-box;
     color: var(--text);
@@ -169,18 +166,7 @@ tr.hidden-row{
     transform: rotate(180deg);
     transform-origin: center;
 }
-.vbtn{
-    z-index: 2;
-    margin-right: -16px;
-    padding-right: 10px;
-    position: relative;
-    text-align: end;
-}
-.vbtn::before{
-    position: relative;
-    z-index: 1;
-}
-.has_variants label {
+.has_variants :first-child label {
     cursor: pointer;
 }
 

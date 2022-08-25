@@ -17,7 +17,7 @@
 }
 .grid-row{
     display: grid;
-    grid-template-columns: 10px repeat(auto-fit, minmax(10px, 1fr));
+    grid-template-columns: 6px repeat(auto-fit, minmax(10px, 1fr));
     align-items: center;
     grid-gap: 15px;
     padding: 13px 15px 11px 15px;
@@ -30,7 +30,7 @@
     display: grid;
     grid-template-columns: 1fr;
 }
-.hidden-row{
+:not(:target).hidden-row{
     display: none;
 }
 
@@ -38,7 +38,8 @@
 .grid-body:nth-child(odd){
     background-color: var(--highlight);
 }
-.grid-row:target {
+/* quintuple (!!!) grid-row so it takes precedence */
+.grid-row.grid-row.grid-row.grid-row.grid-row:target {
     background-color: var(--target-highlight);
 }
 .grid-body.has_variants .grid-row {
@@ -53,7 +54,7 @@
 .grid-body:nth-child(odd).has_variants {
     border-bottom: solid 2px var(--bluer);
 }
-.grid-row.variant-row div:first-child{
+.grid-row.variant-row div:nth-child(2) {
     text-indent: 18px;
 }
 .grid-row.variant-row {
