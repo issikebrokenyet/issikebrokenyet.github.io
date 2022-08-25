@@ -114,8 +114,8 @@ tbody.has_variants  {
 tbody:nth-child(odd).has_variants {
     border-bottom: solid 2px var(--bluer);
 }
-tr.variant-row td:first-child{
-    text-indent: 18px;
+tr.variant-row td:nth-child(2){
+    text-indent: 15px;
 }
 tr.variant-row {
     background-color: var(--variant-highlight);
@@ -136,25 +136,28 @@ td a {
     transition: transform 0.3s;
     transform: scaleY(0);
 }
-:not(:target).hidden-row td {
+/*:not(:target).hidden-row td {
     padding-top: 0;
     padding-bottom: 0;
-}
+}*/
 
-.variant-cell{
+.variant-cell {
+    padding-left: 12px;
     padding-right: 0;
     line-height: 4px;
+    text-align: right;
 }
-.variant-cell button{
-    width: 0;
+.variant-cell + td,
+.variant-cell + th {
+    padding-left: 0;
 }
+
 .toggle-button{
     border: none;
     background-color: inherit;
     font-size: inherit;
     padding: 0;
     cursor: pointer;
-    min-width: 1.5em;
     color: var(--text);
 }
 .toggle-button::before{
@@ -171,27 +174,13 @@ td a {
     transform: rotate(180deg);
     transform-origin: center;
 }
-.vbtn{
-    z-index: 2;
-    margin-right: -16px;
-    padding-right: 10px;
-    position: relative;
-    text-align: end;
-}
-.vbtn::before{
-    position: relative;
-    z-index: 1;
-}
-.has_variants label {
+.has_variants tr:first-child label {
     cursor: pointer;
 }
 
 /*
   Comment styling
 */
-.comment-checkbox{
-    text-align: center;
-}
 .comment-cell{
     line-height: 1.6em;
     background-color: var(--comment-background);
@@ -220,13 +209,6 @@ abbr[title=""] {
 /*
   Checkbox styling
 */
-input[type="checkbox"] + label{
-    color: var(--dimmed-text);
-}
-input[type="checkbox"]:checked + label{
-    color: var(--text);
-}
-
 .complexity.exp {
     color: var(--green);
 }
