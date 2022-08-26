@@ -3,24 +3,29 @@ from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
 from fractions import Fraction
 import markdown
 import re
+from functools import cached_property
+import inspect
 
 class L:
-    '''
+    """
     Complexity function L(a,c) = exp( (c+o(1)) (log n)^a (loglog n)^(1-a) )
-    '''
+    """
     def __init__(self, a, c=None):
-        self.a = Fraction(a)
-        self.c = Fraction(c) if c is not None else float('inf')
+        f = lambda n: (n is None and float('inf')
+                       or type(n) == str and ('.' in n and float(n) or Fraction(n))
+                       or n)
+        self.a = f(a)
+        self.c = f(c)
 
     @classmethod
     def parse(cls, str):
-        m = re.match(r'poly(\(([\d/]+)\))?$', str)
+        m = re.match(r'poly(\((\d+([./]\d+)?)\))?$', str)
         if m:
             return cls(0, m.group(2))
-        m = re.match(r'L\(([\d/]+)(,([\d/]+))?\)$', str)
+        m = re.match(r'L\((\d+([./]\d+)?)(,(\d+([./]\d+)?))?\)$', str)
         if m:
-            return cls(m.group(1), m.group(3))
-        m = re.match(r'exp(\(([\d/]+)\))?$', str)
+            return cls(m.group(1), m.group(4))
+        m = re.match(r'exp(\((\d+([./]\d+)?)\))?$', str)
         if m:
             return cls(1, m.group(2))
         raise RuntimeError('Cannot parse %s as a complexity' % str)
@@ -52,26 +57,72 @@ class L:
     def simple(self):
         if self.a == 0:
             return 'poly'
-        elif self.a == 1:
-            return 'exp'
-        else:
+        elif self.a < 1:
             return 'subexp'
+        else:
+            return 'exp'
+
+#--------------------#
+# Some utility stuff #
+#--------------------#
+
+class NestedDict(dict):
+    'A utility class to easily access subvariants'
+    def __getitem__(self, key):
+        if ">" in key:
+            parent, variant = key.split(">", maxsplit=1)
+            return self[parent].props["variants"][variant]
+        else:
+            return super().__getitem__(key)
+
+def norecloop(default=None):
+    'A decorator to break out of recursion loops for methods (based on self)'
+    def decorator(met):
+        def wrapper(self, *args, **kwds):
+            stack = inspect.stack()
+            current = stack.pop(0)
+            frames = [inspect.getargvalues(s.frame)
+                      for s in stack if s.function == current.function]
+            if any(f.locals['self'] is self for f in frames):
+                return default
+            else:
+                return met(self, *args, **kwds)
+
+        return wrapper
+
+    return decorator
+    
+#----------------------------------#
+# Main Class for Rows in our table #
+#----------------------------------#
 
 class Entry:
-    def __init__(self, id, props):
+    def __init__(self, id, props, parent=None):
+        self.parent = parent
         self.props = props
         self.props["id"] = id
         self.props["this"] = self
-
+        if "variants" in self.props:
+            self.props["variants"] = NestedDict({
+                var: self.__class__(var, props, self)
+                for var, props in self.props["variants"].items()
+            })
+            
     def __repr__(self):
         return self.template.render(self.props)
 
+    @cached_property
+    def longid(self):
+        return (self.parent.longid + '>' if self.parent else '') + self.props["id"]
+    
+    @cached_property
     def name(self):
         if self.props['name'].get('long') and self.props['name'].get('short'):
             return f'<abbr title="{ self.props["name"]["long"] }">{ self.props["name"]["short"] }</abbr>'
         else:
             return self.props['name'].get('short') or self.props['name'].get('long')
 
+    @cached_property
     def reference(self):
         links = []
         reference_dict = self.props.get("references", {})
@@ -85,8 +136,14 @@ class Entry:
 
     def comment_checkbox(self, table):
         if self.props.get("comment"):
-            return f'<input type="checkbox" name="comment-checkbox" id="comment-{table}-{self.props["id"]}-checkbox">'
+            button_ele = f'<button id="comment-{table}:{self.longid}!button" class="toggle-button cbtn">Comment</button>'
+            return button_ele
         return "-"
+
+    def variant_button(self, table):
+        if self.props.get("variants"):
+            return  f'<button id="variant-{table}:{self.longid}!button" class="toggle-button vbtn"></button>'
+        return ""
 
     def reference_in_comment(self, comment):
         # Collect the element's references
@@ -101,78 +158,134 @@ class Entry:
                 comment = comment.replace(f"[{ref}]", anchor)
         return comment
 
+    @cached_property
     def comment(self):
         comment_markdown = self.props.get("comment", "").rstrip()
         comment_html =  markdown.markdown(comment_markdown, 
                                  extensions=["nl2br"])
         return self.reference_in_comment(comment_html)
-    
+
+#-------------------#
+# Logic for Attacks #
+#-------------------#
+
 class Attack(Entry):
     header = """
-    <tr class="header-row">
-      <th>Name</th>
-      <th>Complexity</th>
-      <th>Quantum?</th>
-      <th>Reference</th>
-      <th>Comment</th>
-    </tr>
+    <div class="grid-head">
+        <div class="grid-row">
+          <div>Name</div>
+          <div>Complexity</div>
+          <div>Quantum?</div>
+          <div>Reference</div>
+          <div>Additional Information</div>
+        </div>
+    </div>
     """
     template = Template("""
-    <tr id="attack-{{ id }}"
-        class="quantum-{{ quantum | default(false) }}
+    {% if not this.parent %}<div class="grid-body">{% endif %}
+    <div id="attack:{{ this.longid }}"
+        class="grid-row quantum-{{ quantum | default(false) }}
         complexity">
-    <td class="name">{{ this.name() }}</td>
-    <td class="complexity {{ this.complexity().simple() }}">{{ this.complexity() }}</td>
-    <td class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</td>
-    <td class="reference">{{ this.reference() }}</td>
-    <td class="comment-checkbox">{{ this.comment_checkbox("attack") }}</td>
-    </tr>
-    <tr id="comment-attack-{{ id }}" class="hidden-row">
-        <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
-    </tr>
+    <div class="name">{{ this.name }}</div>
+    <div class="complexity {{ this.complexity.simple() }}">{{ this.complexity }}</div>
+    <div class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</div>
+    <div class="reference">{{ this.reference }}</div>
+    <div class="comment-checkbox">{{ this.comment_checkbox("attack") }}</div>
+    </div>
+    <div id="comment-attack:{{ this.longid }}" class="hidden-row comment-row">
+        <div colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment}}</div>
+    </div>
+    {% if not this.parent %}</div>{% endif %}
     """)
 
+    @property
     def quantum(self):
         return self.props.get("quantum", False)
 
+    @cached_property
     def complexity(self):
-        return L.parse(self.props['complexity'])
+        return L.parse(self.props['complexity'])    
 
-class Trivial(Attack):
-    def __init__(self):
-        self.id = 'trivial'
-        
-    def complexity(self):
-        return L(10)
-trivial = Trivial()
-    
+
+class Reduction(Attack):
+    '''
+    A reduction wrapping an attack.
+
+    Only used during attack resolution.
+    '''
+    def __init__(self, attack, quantum):
+        self.oracle = attack
+        self._quantum = quantum
+        self.props = attack.props
+
+    @property
+    def quantum(self):
+        return self._quantum or self.oracle.quantum
+
+#----------------------------------------------#
+# Logic for Assumption and Assumption variants #
+#----------------------------------------------#
+
 class Assumption(Entry):
+    """
+    The extra hidden rows are for CSS nonsense.
+    Another option would be to use JS to change classes
+    but I really want as little JS as possible...
+
+    Basically, the problem is:
+
+    We can select nth-elements, but we can't count
+    only elements with a certain class, so when we
+    have an odd number of variants, the odd/even
+    color highlight gets an off by one error...
+
+    This is done in Schemes too
+    """
     header = """
-    <tr>
-      <th>Name</th>
-      <th>Classical Security</th>
-      <th>Quantum Security</th>
-      <th>Reference</th>
-      <th>Comment</th>
-    </tr>
+    <div class="grid-head">
+        <div class="grid-row">
+          <div class="variant-cell" widdiv="10"><!-- variant button --></div>
+          <div>Name</div>
+          <div>Classical Security</div>
+          <div>Quantum Security</div>
+          <div>Reference</div>
+          <div>Additional Information</div>
+        </div>
+    </div>
     """
     template = Template("""
-    <tr id="assumption-{{ id }}">
-    <td class="name">{{ this.name() }}</td>
-    <td class="c_sec complexity {{ this.security(False).simple() }}">
-    <a href="#attack-{{ this.best_attack(False).props.id }}"
-       title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
-    </td>
-    <td class="q_sec complexity {{ this.security().simple() }}">
-    <a href="#attack-{{ this.best_attack().props.id }}"
-       title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
-    </td>
-    <td class="reference">{{ this.reference() }}</td>
-    <td class="comment-checkbox">{{ this.comment_checkbox("assumption") }}</td>
-    </tr>
-    <tr id="comment-assumption-{{ id }}" class="hidden-row">
-        <td colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
-    </tr>
+    {% if not this.parent %}<div class="grid-body {% if this.props.variants %}has_variants{% endif %}">{% endif %}
+    <div id="assumption:{{ this.longid }}"
+        {% if this.parent %} 
+            class="grid-row variant-row hidden-row
+            variant-assumption:{{ this.parent.longid }}" 
+        {% else %}
+            class="grid-row"
+        {% endif %}>
+        <div class="variant-cell">{{ this.variant_button("assumption") }}</div>
+        <div class="name"><label for="variant-assumption:{{ this.longid }}!button">{{ this.name }}</label></div>
+        <div class="c_sec complexity {{ this.security(False).simple() }}">
+        <a href="#attack:{{ this.best_attack(False).longid }}"
+           title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
+        </div>
+        <div class="q_sec complexity {{ this.security().simple() }}">
+        <a href="#attack:{{ this.best_attack().longid }}"
+           title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
+        </div>
+        <div class="reference">{{ this.reference }}</div>
+        <div class="checkboxes">
+            {{ this.comment_checkbox("assumption") }}
+        </div>
+    </div>
+    <div id="comment-assumption:{{ this.longid }}" class="comment-row hidden-row">
+        <div class="comment-cell"><h4>Comment</h4>{{this.comment}}</div>
+    </div>
+    {% if this.props.variants %}
+        {% for variant in this.props.variants.values() %}
+                {{ variant }}
+        {% endfor%}
+    {% endif%}
+    {% if not this.parent %}</div>{% endif %}
     """)
 
     def link(self, assumptions, attacks):
@@ -180,73 +293,114 @@ class Assumption(Entry):
             self.props['attacks'] = [attacks[a]
                                      for a in self.props['attacks']]
         if 'reduces_to' in self.props:
-            self.props['reduces_to'] = [assumptions[a]
-                                        for a in self.props['reduces_to']]
+            self.props['reduces_to'] = {a: { 'obj': assumptions[a],
+                                             **(props or {}) }
+                                        for a, props in self.props['reduces_to'].items()}
+        if 'variants' in self.props:
+            for variant in self.props["variants"].values():
+                variant.link(assumptions, attacks)
 
-    def best_attack(self, quantum=True, excl=None):
-        ba1 = min((a
-                   for a in self.props.get('attacks', [])
-                   if not a.quantum() or quantum),
-                  key=lambda a: a.complexity(),
-                  default=trivial)
-        excl = ([] if excl is None else excl) + [self]
-        ba2 = min((a.best_attack(quantum, excl)
-                   for a in self.props.get('reduces_to', [])
-                   if a not in excl),
-                  key=lambda a: a.complexity(),
-                  default=trivial)
-        if ba1 is Trivial:
-            return ba2
-        elif ba2 is Trivial:
-            return ba1
-        else:
-            return min([ba1, ba2], key=lambda a: a.complexity())
+    @norecloop(set())
+    def attacks(self, cache=True):
+        if hasattr(self, '_attacks'):
+            return self._attacks
+        # Any attack on parent is also an attack on us
+        attacks = self.parent.attacks(False) if self.parent is not None else set()
+        # Attacks explicitly listed
+        attacks = attacks.union(a for a in self.props.get('attacks', set()))
+        # Attacks on weaker assumptions are attacks on us
+        for a in self.props.get('reduces_to', {}).values():
+            attacks = attacks.union(Reduction(att, a.get('quantum', False))
+                                    for att in a['obj'].attacks(False))
+        # And now the most controversial one:
+        # if the parent has a generic reduction, specialize it
+        # (assumes a single level of nesting)
+        if self.parent is not None:
+            for a in self.parent.props.get('reduces_to', {}).values():
+                sibling = a['obj'].props.get('variants', dict()).get(self.props['id'])
+                if sibling:
+                    attacks = attacks.union(Reduction(att, a.get('quantum', False))
+                                            for att in sibling.attacks(False))
+
+        if cache:
+            self._attacks = attacks
+        return attacks
+
+    def best_attack(self, quantum=True):
+        return min((a for a in self.attacks() if quantum or not a.quantum),
+                   key=lambda a: a.complexity)
         
     def security(self, quantum=True):
-        return self.best_attack(quantum).complexity()
+        return self.best_attack(quantum).complexity
+
+#---------------------------------------#
+# Logic for Schemes and Scheme variants #
+#---------------------------------------#
 
 class Scheme(Entry):
     header = """
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Classical Security</th>
-      <th>Quantum Security</th>
-      <th>Reference</th>
-      <th>Comment</th>
-    </tr>
+    <div class="grid-head">
+        <div class="grid-row">
+          <div class="variant-cell"><!-- variant button --></div>
+          <div>Name</div>
+          <div>Type</div>
+          <div>Classical Security</div>
+          <div>Quantum Security</div>
+          <div>Reference</div>
+          <div>Additional Information</div>
+        </div>
+    </div>
     """
     template = Template("""
-    <tr id="scheme-{{ id }}">
-    <td class="name">{{ this.name() }}</td>
-    <td class="type">{{ this.format_type() }}</td>
-    <td class="c_sec complexity {{ this.security(False).simple() }}">
-    <a href="#attack-{{ this.best_attack(False).props.id }}"
-       title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
-    </td>
-    <td class="q_sec complexity {{ this.security().simple() }}">
-    <a href="#attack-{{ this.best_attack().props.id }}"
-       title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
-    </td>
-    <td class="reference">{{ this.reference() }}</td>
-    <td class="comment-checkbox">{{ this.comment_checkbox("scheme") }}</td>
-    </tr>
-    <tr id="comment-scheme-{{ id }}" class="hidden-row">
-        <td colspan="6" class="comment-cell"><h4>Comment</h4>{{this.comment()}}</td>
-    </tr>
+    {% if not this.parent %}<div class="grid-body {% if this.props.variants %}has_variants{% endif %}">{% endif %}
+    <div id="scheme:{{ this.longid }}"
+        {% if this.parent %} 
+            class="variant-row grid-row hidden-row
+            variant-scheme:{{ this.parent.longid }}" 
+        {% else %}
+            class="grid-row"
+        {% endif %}>
+        <div class="variant-cell">{{ this.variant_button("scheme") }}</div>
+        <div class="name"><label for="variant-scheme:{{ this.longid }}!button">{{ this.name }}</label></div>
+        <div class="type">{{ this.format_type() }}</div>
+        <div class="c_sec complexity {{ this.security(False).simple() }}">
+        <a href="#attack:{{ this.best_attack(False).longid }}"
+           title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
+        </div>
+        <div class="q_sec complexity {{ this.security().simple() }}">
+        <a href="#attack:{{ this.best_attack().longid }}"
+           title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
+        </div>
+        <div class="reference">{{ this.reference }}</div>
+        <div class="checkboxes">
+            {{ this.comment_checkbox("scheme") }}
+        </div>
+    </div>
+    <div class="comment-row hidden-row" id="comment-scheme:{{ this.longid }}">
+        <div class="comment-cell"><h4>Comment</h4>{{this.comment}}</div>
+    </div>
+    {% if this.props.variants %}
+        {% for variant in this.props.variants.values() %}
+                {{ variant }}
+        {% endfor%}
+    {% endif%}
+    {% if not this.parent %}</div>{% endif %}
     """)
 
     def link(self, assumptions):
         self.props['assumptions'] = [assumptions[a]
                                      for a in self.props['assumptions']]
+        if 'variants' in self.props:
+            for variant in self.props["variants"].values():
+                variant.link(assumptions)
 
     def best_attack(self, quantum=True):
         return min((a.best_attack(quantum)
                     for a in self.props['assumptions']),
-                   key = lambda a: a.complexity())
+                   key = lambda a: a.complexity)
 
     def security(self, quantum=True):
-        return self.best_attack(quantum).complexity()
+        return self.best_attack(quantum).complexity
 
     def format_type(self):
         type_data = self.props['type']
@@ -254,22 +408,26 @@ class Scheme(Entry):
             return ", ".join(type_data)
         return type_data
 
+#-----------------------------#
+# Logic to build the template #
+#-----------------------------#
     
 with open('attacks.yml') as att:
     with open('assumptions.yml') as ass:
         with open('schemes.yml') as sch:
-            attacks = { id : Attack(id, props)
-                        for (id, props) in yaml.safe_load(att).items() }
-            assumptions = { id : Assumption(id, props)
-                             for (id, props) in yaml.safe_load(ass).items() }
-            schemes = { id : Scheme(id, props)
-                        for (id, props) in yaml.safe_load(sch).items() }
+            attacks = NestedDict({ id : Attack(id, props)
+                                   for (id, props) in yaml.safe_load(att).items() })
+            assumptions =  NestedDict({ id : Assumption(id, props)
+                                        for (id, props) in yaml.safe_load(ass).items() })
+            schemes =  NestedDict({ id : Scheme(id, props)
+                                    for (id, props) in yaml.safe_load(sch).items() })
             
             for a in assumptions.values():
                 a.link(assumptions, attacks)
+            
             for s in schemes.values():
                 s.link(assumptions)
-
+                
             env = Environment(
                 loader = FileSystemLoader("templates"),
                 autoescape=select_autoescape()
