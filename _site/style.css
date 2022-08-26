@@ -329,6 +329,8 @@ footer {
     }
     .grid-row .name{
         font-weight: bold;
+        padding-bottom: 10px;
+        border-bottom: solid 2px var(--cell-border);
     }
     .grid-row.variant-row div:nth-child(1) {
         text-indent: 0px;
