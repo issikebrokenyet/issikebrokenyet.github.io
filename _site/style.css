@@ -6,7 +6,8 @@ html[data-theme='light']{
     --red: #cf222e;
     --orange: #ffa700;
     --green: #2da44e;
-    --blue: #0969da;
+    --blue: #6d9dd5;
+    --bluer: #0969da;
     --link: #0969da;
     --link-visited: #9963ff;
     --highlight: #f6f8fa;
@@ -15,6 +16,7 @@ html[data-theme='light']{
     --comment-background: #f0fff0;
     --variant-highlight: #e0e7ff;
     --variant-highlight-alt: #f0f4ff;
+    --column-gap: 15px;
 }
 
 html[data-theme='dark']{
@@ -71,55 +73,122 @@ a:visited{
 }
 
 /*
-  Table Stuff
+  Grid
 */
-table {
-    border-collapse: collapse;
-    margin-bottom: 3em;
-    width: -moz-available;
-    width: -webkit-fill-available;
+.grid-wrapper{
+    margin-bottom: 4em;
+    line-height: 1.22;
 }
-th, td {
-    padding: 13px 15px 11px 15px;
+
+.grid-parent{
+    display: grid;
 }
-th{
+.grid-head,
+.grid-body{
+    display: grid;
+}
+.grid-head{
+    font-weight: bold;
     border-bottom: solid 2px var(--cell-border);
-    text-align: left;
-}
-tr:nth-child(4n+3),
-tr:nth-child(4n+4){
-    background-color: var(--highlight);
-}
-tr.header-row{
     background-color: var(--background);
 }
-tr:target {
-    background-color: var(--target-highlight);
+.grid-row{
+    display: grid;
+    grid-template-columns: 6px repeat(auto-fit, minmax(10px, 1fr));
+    align-items: center;
+    grid-gap: var(--column-gap);
+    padding: 13px 15px 11px 15px;
 }
-tr.variant-row td:first-child{
-    text-indent: 12px;
-    box-shadow: inset 3px 0px 0px 0px var(--blue);
+.attack-grid .grid-head > .grid-row,
+.attack-grid .grid-body > .grid-row{
+    grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
 }
-tr.variant-row:nth-child(4n+1),
-tr.variant-row:nth-child(4n+2){
-    background-color: var(--variant-highlight);
+.comment-row{
+    display: grid;
+    grid-template-columns: 1fr;
 }
-tr.variant-row:nth-child(4n+3),
-tr.variant-row:nth-child(4n+4){
-    background-color: var(--variant-highlight-alt);
-}
-td a {
-    color: inherit;
-}
-.hidden-row{
+:not(:target).hidden-row{
     display: none;
 }
+
+
+.grid-body:nth-child(odd){
+    background-color: var(--highlight);
+}
+/* quintuple (!!!) grid-row so it takes precedence */
+.grid-row.grid-row.grid-row.grid-row.grid-row:target {
+    background-color: var(--target-highlight);
+}
+.grid-body.has_variants .grid-row {
+    box-shadow: inset 3px 0px 0px 0px var(--blue);
+}
+.grid-body:nth-child(odd).has_variants .grid-row {
+    box-shadow: inset 3px 0px 0px 0px var(--bluer);
+}
+.grid-body.has_variants  {
+    border-bottom: solid 2px var(--blue);
+}
+.grid-body:nth-child(odd).has_variants {
+    border-bottom: solid 2px var(--bluer);
+}
+.grid-row.variant-row div:nth-child(2) {
+    text-indent: 18px;
+}
+.grid-row.variant-row {
+    background-color: var(--variant-highlight);
+}
+.grid-body:nth-child(even) .grid-row.variant-row:nth-child(4n+1),
+.grid-body:nth-child(even) .grid-row.variant-row:nth-child(4n+2),
+.grid-body:nth-child(odd)  .grid-row.variant-row:nth-child(4n+3),
+.grid-body:nth-child(odd)  .grid-row.variant-row:nth-child(4n+4)
+{
+    background-color: var(--variant-highlight-alt);
+}
+
+
+/*
+  Toggle buttons
+*/
+.toggle-button{
+    border: none;
+    background-color: inherit;
+    font-size: inherit;
+    padding: 0;
+    cursor: pointer;
+    color: var(--text);
+}
+.toggle-button::before{
+    content: "▵";
+    transform: rotate(90deg);
+    transform-origin: center;
+    display: inline-block;
+    margin-inline-end: 6px;
+    transition: transform 0.3s ease;
+    box-sizing:border-box;
+    color: var(--text);
+}
+.toggle-button[aria-expanded]::before{
+    transform: rotate(180deg);
+    transform-origin: center;
+}
+
+/*
+  Variants
+*/
+
+.variant-cell{
+    line-height: 4px;
+    margin-inline-end: calc(0px - var(--column-gap));
+    text-align: end;
+}
+.has_variants :first-child label {
+    cursor: pointer;
+}
+
 /*
   Comment styling
 */
-.comment-checkbox{
-    text-align: center;
-}
+
 .comment-cell{
     line-height: 1.6em;
     background-color: var(--comment-background);
@@ -146,25 +215,8 @@ abbr[title=""] {
 }
 
 /*
-  Checkbox styling
+  Table entries styling
 */
-input[type="checkbox"]{
-    display: none;
-}
-input[type="checkbox"] + label{
-    color: var(--dimmed-text);
-    cursor: pointer;
-}
-input[type="checkbox"]:checked + label, input[type="checkbox"]:hover + label{
-    color: var(--text);
-}
-input[type="checkbox"] + label > .chevron{
-    display: inline-block;
-    transition: transform .7s;
-}
-input[type="checkbox"]:checked + label > .chevron{
-    transform: rotate(90deg);
-}
 
 .complexity.exp {
     color: var(--green);
@@ -186,6 +238,8 @@ a.reference-link{
 a.reference-link:visited{
     color: var(--link-visited);
 }
+
+/***/
 
 footer {
     margin: 2em 0;
