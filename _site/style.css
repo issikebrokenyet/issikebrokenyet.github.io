@@ -79,10 +79,6 @@ a:visited{
     margin-bottom: 4em;
     line-height: 1.22;
 }
-
-.grid-parent{
-    display: grid;
-}
 .grid-head,
 .grid-body{
     display: grid;
@@ -94,15 +90,27 @@ a:visited{
 }
 .grid-row{
     display: grid;
-    grid-template-columns: 6px repeat(auto-fit, minmax(10px, 1fr));
     align-items: center;
     grid-gap: var(--column-gap);
     padding: 13px 15px 11px 15px;
 }
-.attack-grid .grid-head > .grid-row,
-.attack-grid .grid-body > .grid-row{
-    grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+
+.grid-schemes .grid-head > .grid-row,
+.grid-schemes .grid-body > .grid-row{
+    grid-template-columns: 5px 1fr 150px 100px 100px 100px 110px;
 }
+
+.grid-assumptions .grid-head > .grid-row,
+.grid-assumptions .grid-body > .grid-row{
+    grid-template-columns: 0px 1fr 120px 120px 120px 110px;
+}
+
+.grid-attacks .grid-head > .grid-row,
+.grid-attacks .grid-body > .grid-row{
+    grid-template-columns: 1fr 1fr 1fr 1fr 110px;
+}
+
+
 .comment-row{
     display: grid;
     grid-template-columns: 1fr;
@@ -125,14 +133,14 @@ a:visited{
 .grid-body:nth-child(odd).has_variants .grid-row {
     box-shadow: inset 3px 0px 0px 0px var(--bluer);
 }
-.grid-body.has_variants  {
-    border-bottom: solid 2px var(--blue);
+.grid-body.has_variants .variant-row:nth-last-child(2)  {
+    border-bottom: solid 3px var(--blue);
 }
-.grid-body:nth-child(odd).has_variants {
-    border-bottom: solid 2px var(--bluer);
+.grid-body:nth-child(odd).has_variants .variant-row:nth-last-child(2) {
+    border-bottom: solid 3px var(--bluer);
 }
 .grid-row.variant-row div:nth-child(2) {
-    text-indent: 18px;
+    text-indent: 11px;
 }
 .grid-row.variant-row {
     background-color: var(--variant-highlight);

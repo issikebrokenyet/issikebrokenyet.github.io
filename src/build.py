@@ -176,7 +176,7 @@ class Attack(Entry):
           <div>Name</div>
           <div>Complexity</div>
           <div>Quantum?</div>
-          <div>Reference</div>
+          <div>References</div>
           <div>Additional Information</div>
         </div>
     </div>
@@ -248,13 +248,13 @@ class Assumption(Entry):
           <div>Name</div>
           <div>Classical Security</div>
           <div>Quantum Security</div>
-          <div>Reference</div>
+          <div>References</div>
           <div>Additional Information</div>
         </div>
     </div>
     """
     template = Template("""
-    {% if not this.parent %}<div class="grid-body {% if this.props.variants %}has_variants{% endif %}">{% endif %}
+    {% if not this.parent %}<div class="grid-body{% if this.props.variants %} has_variants{% endif %}">{% endif %}
     <div id="assumption:{{ this.longid }}"
         {% if this.parent %} 
             class="grid-row variant-row hidden-row
@@ -346,7 +346,7 @@ class Scheme(Entry):
           <div>Type</div>
           <div>Classical Security</div>
           <div>Quantum Security</div>
-          <div>Reference</div>
+          <div>References</div>
           <div>Additional Information</div>
         </div>
     </div>
