@@ -86,6 +86,20 @@ ssisopath:
     isogeny walk between them. In some versions of the problem, one of
     the two curves is fixed. First considered in [CGL06]. Proven
     equivalent to the Endomorphism ring problem in [Wes21].
+  variants:
+    short:
+      name:
+        long: The short supersingular isogeny path problem
+      references:
+        GP+16: 'https://eprint.iacr.org/2016/859'
+      attacks:
+        - mitm
+      comment: >-
+        The variant of the isogeny path problem where the distance
+        between the two curves in some isogeny graph is bounded away
+        from the average distance of two random curves. [GP+16] proves
+        that this problem heuristically reduces to the problem of
+        finding paths of generic length.
 
 ssendring:
   name:
@@ -236,3 +250,18 @@ gaddh:
       references:
         CK20: 'https://eprint.iacr.org/2020/985'
         CH+22: 'https://eprint.iacr.org/2022/345'
+
+dssp:
+  name:
+    short: DSSP
+    long: Decisional Supersingular Product
+  reduces_to:
+    ssisopath>short:
+  references:
+    DJP14: 'https://eprint.iacr.org/2011/506'
+    DD+21: "https://eprint.iacr.org/2021/1023"
+  comment: >-
+    Given two supersingular isogenies $φ:E₀→E₁$ and $φ':E₂→E₃$ of the
+    same degree $A$, and given an integer $B$ coprime to $A$, decide
+    whether there exist isogenies $ψ:E₀→E₂$ and $ψ':E₁→E₃$ of degree
+    $B$ such that $φ,φ′,ψ,ψ'$ form a commutative diagram.

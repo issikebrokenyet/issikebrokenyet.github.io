@@ -124,3 +124,71 @@ osidh:
   comment: >-
     Variant of CRS/CSIDH based on the action of a class group on a set
     of supersingular curves reached by "volcano descent".
+
+seasign:
+  name:
+    long: SeaSign
+  type:
+    - Σ-protocol
+    - Signature
+  assumptions:
+    - vector
+  references:
+    DG18: "https://eprint.iacr.org/2018/824"
+  comment: >-
+    Proof of knowledge and signature based on group actions. Usually
+    instantiated from [CSIDH](#scheme:csidh). Not very efficient.
+
+csi-fish:
+  name:
+    short: CSI-FiSh
+    long: Commutative Supersingular Isogeny based Fiat-Shamir signatures
+  type:
+    - Σ-protocol
+    - Signature
+  assumptions:
+    - vector
+  references:
+    Sto10: 'https://dx.doi.org/10.3934/amc.2010.4.215'
+    BKV19: "https://eprint.iacr.org/2019/498"
+  comment: >-
+    Proof of knowledge and signature based on the group action
+    [CSIDH-512](#scheme:csidh), for which the class group structure
+    was computed on purpose.
+
+sidh-sign:
+  name:
+    short: SIDH PoK
+    long: SIDH Proof of Knowledge
+  type:
+    - Σ-protocol
+    - Signature
+  assumptions:
+    - cssi>special-curve
+    - dssp
+  references:
+    DJP14: 'https://eprint.iacr.org/2011/506'
+    YA+17: 'https://eprint.iacr.org/2017/186'
+    DD+21: "https://eprint.iacr.org/2021/1023"
+    GK+21: "https://eprint.iacr.org/2021/1051"
+  comment: >-
+    Proof of knowledge and signature based on the SIDH assumption.
+    Initially proposed in [DJP14]. [YA+17] adapts it into a signature,
+    [DD+21] and [GK+21] fix mistakes in the security proof, [DD+21]
+    introduces a variant with stronger soundness guarantees.
+
+weaksidh-sign:
+  name:
+    short: weakSIDH PoK
+    long: Weak SIDH Proof of Knowledge
+  type:
+    - Σ-protocol
+    - Signature
+  assumptions:
+    - ssisopath>short
+    - dssp
+  references:
+    DD+21: "https://eprint.iacr.org/2021/1023"
+  comment: >-
+    Proof of knowledge and signature based on the weakSIDH assumption,
+    i.e., the SIDH assumption without torsion point information.
