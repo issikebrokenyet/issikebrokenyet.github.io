@@ -19,7 +19,7 @@
     display: grid;
     grid-template-columns: 6px repeat(auto-fit, minmax(10px, 1fr));
     align-items: center;
-    grid-gap: 15px;
+    grid-gap: var(--column-gap);
     padding: 13px 15px 11px 15px;
 }
 .attack-grid .grid-head > .grid-row,

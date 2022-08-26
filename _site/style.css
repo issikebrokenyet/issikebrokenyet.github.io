@@ -16,6 +16,7 @@ html[data-theme='light']{
     --comment-background: #f0fff0;
     --variant-highlight: #e0e7ff;
     --variant-highlight-alt: #f0f4ff;
+    --column-gap: 15px;
 }
 
 html[data-theme='dark']{
@@ -72,78 +73,8 @@ a:visited{
 }
 
 /*
-  Table Stuff
+  Toggle buttons
 */
-table {
-    border-collapse: collapse;
-    margin-bottom: 3em;
-    width: -moz-available;
-    width: -webkit-fill-available;
-    overflow: hidden;
-}
-th, td {
-    padding: 13px 15px 11px 15px;
-    transition: padding 0.3s ease;
-    position: relative;
-    line-height: 1.25;
-}
-th{
-    border-bottom: solid 2px var(--cell-border);
-    text-align: left;
-}
-tbody:nth-child(odd){
-    background-color: var(--highlight);
-}
-tr.header-row{
-    background-color: var(--background);
-}
-tr:target {
-    background-color: var(--target-highlight);
-}
-tbody.has_variants tr {
-    box-shadow: inset 3px 0px 0px 0px var(--blue);
-}
-tbody:nth-child(odd).has_variants tr {
-    box-shadow: inset 3px 0px 0px 0px var(--bluer);
-}
-tbody.has_variants  {
-    border-bottom: solid 2px var(--blue);
-}
-tbody:nth-child(odd).has_variants {
-    border-bottom: solid 2px var(--bluer);
-}
-tr.variant-row td:first-child{
-    text-indent: 18px;
-}
-tr.variant-row {
-    background-color: var(--variant-highlight);
-}
-tbody:nth-child(even) tr.variant-row:nth-child(4n+1),
-tbody:nth-child(even) tr.variant-row:nth-child(4n+2),
-tbody:nth-child(odd) tr.variant-row:nth-child(4n+3),
-tbody:nth-child(odd) tr.variant-row:nth-child(4n+4)
-{
-    background-color: var(--variant-highlight-alt);
-}
-
-td a {
-    color: inherit;
-}
-tr.hidden-row{
-    visibility: collapse;
-    transition: transform 0.3s;
-    transform: scaleY(0);
-}
-.hidden-row td {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-.variant-cell{
-    line-height: 4px;
-    margin-inline-end: -15px;
-    text-align: end;
-}
 .toggle-button{
     border: none;
     background-color: inherit;
@@ -165,6 +96,16 @@ tr.hidden-row{
 .toggle-button[aria-expanded]::before{
     transform: rotate(180deg);
     transform-origin: center;
+}
+
+/*
+  Variants
+*/
+
+.variant-cell{
+    line-height: 4px;
+    margin-inline-end: calc(0px - var(--column-gap));
+    text-align: end;
 }
 .has_variants :first-child label {
     cursor: pointer;
@@ -200,14 +141,8 @@ abbr[title=""] {
 }
 
 /*
-  Checkbox styling
+  Table entries styling
 */
-input[type="checkbox"] + label{
-    color: var(--dimmed-text);
-}
-input[type="checkbox"]:checked + label{
-    color: var(--text);
-}
 
 .complexity.exp {
     color: var(--green);
@@ -229,6 +164,8 @@ a.reference-link{
 a.reference-link:visited{
     color: var(--link-visited);
 }
+
+/***/
 
 footer {
     margin: 2em 0;
