@@ -318,6 +318,17 @@ footer {
     .grid-head{
         display: none;
     }
+    .grid-body{
+        margin-bottom: 3em;
+        width: calc(100vw - 1.5em);
+    }
+    .grid-row,
+    .has_variants{
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    }
+    .grid-body:nth-child(odd){
+        background-color: var(--background);
+    }
     .grid-row div::before{
         content: attr(data-name) ": " ;
         font-weight: bold;
