@@ -97,7 +97,7 @@ a:visited{
 
 .grid-schemes .grid-head > .grid-row,
 .grid-schemes .grid-body > .grid-row{
-    grid-template-columns: 5px 1fr 150px 100px 100px 100px 110px;
+    grid-template-columns: 5px 1fr 1fr 95px 95px 115px 110px;
 }
 
 .grid-assumptions .grid-head > .grid-row,
