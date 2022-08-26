@@ -78,10 +78,12 @@ a:visited{
 .grid-wrapper{
     margin-bottom: 4em;
     line-height: 1.22;
+    overflow: scroll;
 }
 .grid-head,
 .grid-body{
     display: grid;
+    min-width: min-content;
 }
 .grid-head{
     font-weight: bold;
@@ -97,17 +99,17 @@ a:visited{
 
 .grid-schemes .grid-head > .grid-row,
 .grid-schemes .grid-body > .grid-row{
-    grid-template-columns: 5px 1fr 1fr 95px 95px 115px 110px;
+    grid-template-columns: minmax(130px, 1fr) minmax(120px, 1fr) 95px 95px 115px 110px;
 }
 
 .grid-assumptions .grid-head > .grid-row,
 .grid-assumptions .grid-body > .grid-row{
-    grid-template-columns: 0px 1fr 120px 120px 120px 110px;
+    grid-template-columns: minmax(140px, 1fr) 120px 120px 120px 110px;
 }
 
 .grid-attacks .grid-head > .grid-row,
 .grid-attacks .grid-body > .grid-row{
-    grid-template-columns: 1fr 1fr 1fr 1fr 110px;
+    grid-template-columns: minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) 110px;
 }
 
 
@@ -119,6 +121,14 @@ a:visited{
     display: none;
 }
 
+
+.grid-row div:first-child{
+    padding-left: 25px;
+}
+.grid-attacks .grid-row div:first-child,
+.grid-body.has_variants .grid-row div:first-child{
+    padding-left: 0px;
+}
 
 .grid-body:nth-child(odd){
     background-color: var(--highlight);
@@ -139,8 +149,8 @@ a:visited{
 .grid-body:nth-child(odd).has_variants .variant-row:nth-last-child(2) {
     border-bottom: solid 3px var(--bluer);
 }
-.grid-row.variant-row div:nth-child(2) {
-    text-indent: 11px;
+.grid-row.variant-row div:nth-child(1) {
+    text-indent: 36px;
 }
 .grid-row.variant-row {
     background-color: var(--variant-highlight);
@@ -272,14 +282,14 @@ footer {
   and (min-device-width: 320px) 
   and (max-device-width: 900px) { 
 
+    html{
+        margin: 0 10px;
+    }
     body{
         min-width: 0;
     }
-
-    .table-div{
-        overflow: hidden;
-        width: calc(100%);
-        overflow-x: scroll;
+    h2{
+        margin-left: 0.5em;
     }
 
     abbr[title].touched::after {
@@ -304,6 +314,34 @@ footer {
     abbr[title=""] {
         text-decoration: none;
     }
+
+    .grid-head{
+        display: none;
+    }
+    .grid-row div::before{
+        content: attr(data-name) ": " ;
+        font-weight: bold;
+        color: var(--text);
+    }
+    .grid-row div.name::before,
+    .grid-row div.checkboxes::before{
+        content:  "";
+    }
+    .grid-row .name{
+        font-weight: bold;
+    }
+    .grid-row.variant-row div:nth-child(1) {
+        text-indent: 0px;
+    }
+    .grid-row div:first-child{
+        padding-left: 0px;
+    }
+    .grid-schemes .grid-body > .grid-row,
+    .grid-attacks .grid-body > .grid-row,
+    .grid-assumptions .grid-body > .grid-row{
+        grid-template-columns: 1fr
+    }
+
 
     .comment-cell{
         padding-right: calc(100% - 100vw + 3em);
