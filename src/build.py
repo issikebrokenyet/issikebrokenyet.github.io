@@ -217,6 +217,7 @@ class Reduction(Attack):
         self.oracle = attack
         self._quantum = quantum
         self.props = attack.props
+        self.parent = attack.parent
 
     @property
     def quantum(self):
