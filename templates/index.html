@@ -35,6 +35,8 @@
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="grid.css" />
+
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
     	  tex2jax: {
@@ -52,25 +54,25 @@
   <body>
     <h1>Is SIKE broken yet?</h1>
     <h2 id="schemes">Schemes</h2>
-    <div class="table-div">
-      <table>
+    <div class="grid-wrapper">
+      <div class="grid-parent">
         {{ schemes_head | safe }}
         {{ schemes | safe }}
-      </table>
+      </div>
     </div>
     <h2 id="assumptions">Assumptions</h2>
-    <div class="table-div">
-      <table>
+    <div class="grid-wrapper">
+      <div class="grid-parent">
         {{ assumptions_head | safe }}
         {{ assumptions | safe }}
-      </table>
+      </div>
     </div>
     <h2 id="attacks">Attacks</h2>
-    <div class="table-div">
-      <table>
+    <div class="grid-wrapper">
+      <div class="grid-parent attack-grid">
         {{ attacks_head | safe }}
         {{ attacks | safe }}
-      </table>
+      </div>
     </div>
     <footer>
       <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>

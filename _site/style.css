@@ -187,9 +187,7 @@ tr.hidden-row{
 /*
   Comment styling
 */
-.comment-checkbox{
-    text-align: center;
-}
+
 .comment-cell{
     line-height: 1.6em;
     background-color: var(--comment-background);

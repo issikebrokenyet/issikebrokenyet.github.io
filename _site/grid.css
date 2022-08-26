@@ -1,0 +1,68 @@
+.grid-wrapper{
+    margin-bottom: 4em;
+    line-height: 1.22;
+}
+
+.grid-parent{
+    display: grid;
+}
+.grid-head,
+.grid-body{
+    display: grid;
+}
+.grid-head{
+    font-weight: bold;
+    border-bottom: solid 2px var(--cell-border);
+    background-color: var(--background);
+}
+.grid-row{
+    display: grid;
+    grid-template-columns: 10px repeat(auto-fit, minmax(10px, 1fr));
+    align-items: center;
+    grid-gap: 15px;
+    padding: 13px 15px 11px 15px;
+}
+.attack-grid .grid-head > .grid-row,
+.attack-grid .grid-body > .grid-row{
+    grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+}
+.comment-row{
+    display: grid;
+    grid-template-columns: 1fr;
+}
+.hidden-row{
+    display: none;
+}
+
+
+.grid-body:nth-child(odd){
+    background-color: var(--highlight);
+}
+.grid-row:target {
+    background-color: var(--target-highlight);
+}
+.grid-body.has_variants .grid-row {
+    box-shadow: inset 3px 0px 0px 0px var(--blue);
+}
+.grid-body:nth-child(odd).has_variants .grid-row {
+    box-shadow: inset 3px 0px 0px 0px var(--bluer);
+}
+.grid-body.has_variants  {
+    border-bottom: solid 2px var(--blue);
+}
+.grid-body:nth-child(odd).has_variants {
+    border-bottom: solid 2px var(--bluer);
+}
+.grid-row.variant-row div:first-child{
+    text-indent: 18px;
+}
+.grid-row.variant-row {
+    background-color: var(--variant-highlight);
+}
+.grid-body:nth-child(even) .grid-row.variant-row:nth-child(4n+1),
+.grid-body:nth-child(even) .grid-row.variant-row:nth-child(4n+2),
+.grid-body:nth-child(odd)  .grid-row.variant-row:nth-child(4n+3),
+.grid-body:nth-child(odd)  .grid-row.variant-row:nth-child(4n+4)
+{
+    background-color: var(--variant-highlight-alt);
+}
