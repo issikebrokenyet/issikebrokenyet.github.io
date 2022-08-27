@@ -125,7 +125,7 @@ a:visited{
 
 
 .grid-row div:first-child{
-    padding-left: 25px;
+    padding-left: 26px;
 }
 .grid-attacks .grid-row div:first-child,
 .grid-body.has_variants .grid-row div:first-child{
@@ -187,6 +187,7 @@ a:visited{
     transition: transform 0.3s ease;
     box-sizing:border-box;
     color: var(--text);
+    width: 12px;
 }
 .toggle-button[aria-expanded]::before{
     transform: rotate(180deg);
