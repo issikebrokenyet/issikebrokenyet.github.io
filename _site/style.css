@@ -39,6 +39,10 @@ html[data-theme='dark']{
     --box-shadow-card: 0 -3px 10px rgb(0 0 0);
 }
 
+*{
+    box-sizing: border-box;
+}
+
 html{
     margin: 0 1em;
     font-family:  sans-serif;
@@ -177,6 +181,7 @@ a:visited{
     padding: 0;
     cursor: pointer;
     color: var(--text);
+    margin: 0;
 }
 .toggle-button::before{
     content: "▵";
