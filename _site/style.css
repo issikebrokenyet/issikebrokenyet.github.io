@@ -17,7 +17,7 @@ html[data-theme='light']{
     --variant-highlight: #e0e7ff;
     --variant-highlight-alt: #f0f4ff;
     --column-gap: 15px;
-    --box-shadow-card: rgb(0 0 0 / 10%) 0px 4px 6px -1px, rgb(0 0 0 / 6%) 0px 2px 4px -1px;
+    --box-shadow-card: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 
 html[data-theme='dark']{
@@ -36,7 +36,7 @@ html[data-theme='dark']{
     --comment-background: #38fd880d;
     --variant-highlight: #6282ff1a;
     --variant-highlight-alt: #6282ff26;
-    --box-shadow-card: 0 -3px 10px rgb(0 0 0);
+    --box-shadow-card: 0 -3px 12px rgb(0 0 0);
 }
 
 *{
@@ -328,8 +328,7 @@ footer {
         display: none;
     }
     .grid-body{
-        margin-bottom: 3em;
-        width: calc(100vw - 1.5em);
+        margin: 1em 1em 2em calc(1em - 3px)
     }
     .grid-body,
     .has_variants{
