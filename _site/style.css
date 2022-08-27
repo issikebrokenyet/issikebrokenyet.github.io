@@ -140,10 +140,11 @@ a:visited{
     background-color: var(--target-highlight);
 }
 .grid-body.has_variants .grid-row {
-    box-shadow: inset 3.5px 0px 0px -0.52px var(--blue);
+    border-left: 3px solid var(--blue);
+
 }
 .grid-body:nth-child(odd).has_variants .grid-row {
-    box-shadow: inset 3.5px 0px 0px -0.52px var(--blue);
+    border-left: 3px solid var(--bluer);
 }
 .grid-body.has_variants .variant-row:nth-last-child(2)  {
     border-bottom: solid 3px var(--blue);
@@ -212,7 +213,7 @@ a:visited{
 .comment-cell{
     line-height: 1.6em;
     background-color: var(--comment-background);
-    box-shadow: inset 3.5px 0px 0px -0.52px var(--green);
+    border-left: 3px solid var(--green);
     padding-left: 1.75em;
     -webkit-text-size-adjust: none
 }
@@ -324,7 +325,7 @@ footer {
         margin-bottom: 3em;
         width: calc(100vw - 1.5em);
     }
-    .grid-row,
+    .grid-body,
     .has_variants{
         box-shadow: var(--box-shadow-card);
     }
@@ -344,6 +345,12 @@ footer {
         font-weight: bold;
         padding-bottom: 10px;
         border-bottom: solid 2px var(--cell-border);
+    }
+    .grid-body.has_variants .variant-row:nth-last-child(2)  {
+        border-bottom: solid 0px var(--blue);
+    }
+    .grid-body:nth-child(odd).has_variants .variant-row:nth-last-child(2) {
+        border-bottom: solid 0px var(--bluer);
     }
     .grid-row.variant-row div:nth-child(1) {
         text-indent: 0px;
