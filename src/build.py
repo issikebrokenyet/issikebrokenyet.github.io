@@ -190,7 +190,7 @@ class Attack(Entry):
     <div class="complexity {{ this.complexity.simple() }}" data-name="Complexity">{{ this.complexity }}</div>
     <div class="quantum" data-name="Quantum">{% if quantum %}Yes{% else %}No{% endif %}</div>
     <div class="reference" data-name="References:">{{ this.reference }}</div>
-    <div class="comment-checkbox">{{ this.comment_checkbox("attack") }}</div>
+    <div class="comment-button-cell">{{ this.comment_checkbox("attack") }}</div>
     </div>
     <div id="comment-attack:{{ this.longid }}" class="hidden-row comment-row">
         <div colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment}}</div>
@@ -271,7 +271,7 @@ class Assumption(Entry):
            title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
         </div>
         <div class="reference" data-name="References">{{ this.reference }}</div>
-        <div class="checkboxes">
+        <div class="comment-button-cell">
             {{ this.comment_checkbox("assumption") }}
         </div>
     </div>
@@ -368,7 +368,7 @@ class Scheme(Entry):
            title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
         </div>
         <div class="reference" data-name="References">{{ this.reference }}</div>
-        <div class="checkboxes">
+        <div class="comment-button-cell">
             {{ this.comment_checkbox("scheme") }}
         </div>
     </div>
