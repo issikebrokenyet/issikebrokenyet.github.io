@@ -373,5 +373,9 @@ footer {
     .comment-cell{
         padding: 0 1em;
     }
+    .comment-cell h4{
+        margin: 1rem 0;
+        display: none;
+    }
 
 }
