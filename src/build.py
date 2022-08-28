@@ -176,7 +176,7 @@ class Attack(Entry):
           <div>Name</div>
           <div>Complexity</div>
           <div>Quantum?</div>
-          <div>Reference</div>
+          <div>References</div>
           <div>Additional Information</div>
         </div>
     </div>
@@ -187,10 +187,10 @@ class Attack(Entry):
         class="grid-row quantum-{{ quantum | default(false) }}
         complexity">
     <div class="name">{{ this.name }}</div>
-    <div class="complexity {{ this.complexity.simple() }}">{{ this.complexity }}</div>
-    <div class="quantum">{% if quantum %}Yes{% else %}No{% endif %}</div>
-    <div class="reference">{{ this.reference }}</div>
-    <div class="comment-checkbox">{{ this.comment_checkbox("attack") }}</div>
+    <div class="complexity {{ this.complexity.simple() }}" data-name="Complexity">{{ this.complexity }}</div>
+    <div class="quantum" data-name="Quantum">{% if quantum %}Yes{% else %}No{% endif %}</div>
+    <div class="reference" data-name="References:">{{ this.reference }}</div>
+    <div class="comment-button-cell">{{ this.comment_checkbox("attack") }}</div>
     </div>
     <div id="comment-attack:{{ this.longid }}" class="hidden-row comment-row">
         <div colspan="5" class="comment-cell"><h4>Comment</h4>{{this.comment}}</div>
@@ -245,17 +245,16 @@ class Assumption(Entry):
     header = """
     <div class="grid-head">
         <div class="grid-row">
-          <div class="variant-cell" widdiv="10"><!-- variant button --></div>
           <div>Name</div>
           <div>Classical Security</div>
           <div>Quantum Security</div>
-          <div>Reference</div>
+          <div>References</div>
           <div>Additional Information</div>
         </div>
     </div>
     """
     template = Template("""
-    {% if not this.parent %}<div class="grid-body {% if this.props.variants %}has_variants{% endif %}">{% endif %}
+    {% if not this.parent %}<div class="grid-body{% if this.props.variants %} has_variants{% endif %}">{% endif %}
     <div id="assumption:{{ this.longid }}"
         {% if this.parent %} 
             class="grid-row variant-row hidden-row
@@ -263,18 +262,17 @@ class Assumption(Entry):
         {% else %}
             class="grid-row"
         {% endif %}>
-        <div class="variant-cell">{{ this.variant_button("assumption") }}</div>
-        <div class="name"><label for="variant-assumption:{{ this.longid }}!button">{{ this.name }}</label></div>
-        <div class="c_sec complexity {{ this.security(False).simple() }}">
+        <div class="name">{{ this.variant_button("assumption") }} <label for="variant-assumption:{{ this.longid }}!button">{{ this.name }}</label></div>
+        <div class="c_sec complexity {{ this.security(False).simple() }}" data-name="Classical Security">
         <a href="#attack:{{ this.best_attack(False).longid }}"
            title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
         </div>
-        <div class="q_sec complexity {{ this.security().simple() }}">
+        <div class="q_sec complexity {{ this.security().simple() }}" data-name="Quantum Security">
         <a href="#attack:{{ this.best_attack().longid }}"
            title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
         </div>
-        <div class="reference">{{ this.reference }}</div>
-        <div class="checkboxes">
+        <div class="reference" data-name="References">{{ this.reference }}</div>
+        <div class="comment-button-cell">
             {{ this.comment_checkbox("assumption") }}
         </div>
     </div>
@@ -342,12 +340,11 @@ class Scheme(Entry):
     header = """
     <div class="grid-head">
         <div class="grid-row">
-          <div class="variant-cell"><!-- variant button --></div>
           <div>Name</div>
           <div>Type</div>
           <div>Classical Security</div>
           <div>Quantum Security</div>
-          <div>Reference</div>
+          <div>References</div>
           <div>Additional Information</div>
         </div>
     </div>
@@ -361,19 +358,18 @@ class Scheme(Entry):
         {% else %}
             class="grid-row"
         {% endif %}>
-        <div class="variant-cell">{{ this.variant_button("scheme") }}</div>
-        <div class="name"><label for="variant-scheme:{{ this.longid }}!button">{{ this.name }}</label></div>
-        <div class="type">{{ this.format_type() }}</div>
-        <div class="c_sec complexity {{ this.security(False).simple() }}">
+        <div class="name">{{ this.variant_button("scheme") }} <label for="variant-scheme:{{ this.longid }}!button">{{ this.name }}</label></div>
+        <div class="type" data-name="Type">{{ this.format_type() }}</div>
+        <div class="c_sec complexity {{ this.security(False).simple() }}" data-name="Classical Security">
         <a href="#attack:{{ this.best_attack(False).longid }}"
            title="{{ this.best_attack(False).props.name.long }}">{{ this.security(False) }}</a>
         </div>
-        <div class="q_sec complexity {{ this.security().simple() }}">
+        <div class="q_sec complexity {{ this.security().simple() }}" data-name="Quantum Security">
         <a href="#attack:{{ this.best_attack().longid }}"
            title="{{ this.best_attack().props.name.long }}">{{ this.security() }}</a>
         </div>
-        <div class="reference">{{ this.reference }}</div>
-        <div class="checkboxes">
+        <div class="reference" data-name="References">{{ this.reference }}</div>
+        <div class="comment-button-cell">
             {{ this.comment_checkbox("scheme") }}
         </div>
     </div>
