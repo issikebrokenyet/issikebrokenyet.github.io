@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- SEO Meta Data -->
+    <meta name="description"
+          content="{% block description %}{% endblock %}" />
+    <link rel="canonical" href="https://issikebrokenyet.github.io" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ self.title() }}" />
+    <meta property="og:description" 
+          content="{{ self.description() }}" />
+    <meta property="og:url" content="https://issikebrokenyet.github.io/" />
+    <meta property="og:site_name" content="{{ self.title() }}" />
+    <meta property="og:image" content="https://issikebrokenyet.github.io/isby.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ self.title() }}" />
+    <meta name="twitter:description" 
+          content="{{ self.description() }}" />
+    <meta name="twitter:site" content="https://issikebrokenyet.github.io" />
+    <meta name="twitter:image" content="https://issikebrokenyet.github.io/isby.png" />
+
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
@@ -15,10 +35,13 @@
     <meta name="msapplication-config" content="/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
+    <!-- CSS Styling -->
     <link rel="stylesheet" href="style.css" />
 
+    <!-- Additional head info from child template -->
     {% block head %}{% endblock %}
 
+    <!-- MathJax Config -->
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
           tex2jax: {
@@ -34,6 +57,7 @@
     </script>
   </head>
   <body>
+    <!-- Child template content -->
     {% block content %}{% endblock %}
     <footer>
       <a href="https://github.com/issikebrokenyet/issikebrokenyet.github.io/">Contribute on GitHub</a>
@@ -43,6 +67,7 @@
   </body>
 
   <script src="theme.js"></script>
+  <!-- Child template javascript -->
   {% block scripts %}
   {% endblock %}
 </html>
