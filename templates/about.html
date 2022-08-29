@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Is SIKE broken yet?{% endblock %}
+{% block description %}A knowledge base of most isogeny based cryptosystems and the best attacks on them.{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="highlight.css" />
+{% endblock %}
+{% block content %}
+{{about_content | safe}}
+{% endblock %}

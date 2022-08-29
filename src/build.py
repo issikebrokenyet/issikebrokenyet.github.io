@@ -430,11 +430,36 @@ with open('attacks.yml') as att:
                 autoescape=select_autoescape()
             )
             index = env.get_template("index.html")
-            print(index.render(
+            index_page = index.render(
                 schemes_head=Scheme.header,
                 schemes="\n".join(repr(a) for a in schemes.values()),
                 assumptions_head=Assumption.header,
                 assumptions="\n".join(repr(a) for a in assumptions.values()),
                 attacks_head=Attack.header,
                 attacks="\n".join(repr(a) for a in attacks.values())
-            ))
+            )
+
+            # Save output to index file
+            with open('_site/index.html', 'w') as f:
+                f.write(index_page)
+
+#-------------------------------------------------------#
+# Open README.html and render as HTML for an about page #
+#-------------------------------------------------------#
+with open('README.md') as f:
+    about_markdown = f.read()
+    about_html     =  markdown.markdown(about_markdown, 
+                                extensions=["fenced_code", "codehilite"])
+    env = Environment(
+                loader = FileSystemLoader("templates"),
+                autoescape=select_autoescape()
+            )
+    about = env.get_template("about.html")
+    about_page = about.render(about_content=about_html)
+
+    # Save output to about file
+    with open('_site/about.html', 'w') as f:
+        f.write(about_page)
+
+
+

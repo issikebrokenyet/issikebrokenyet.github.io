@@ -18,6 +18,7 @@ html[data-theme='light']{
     --variant-highlight-alt: #f0f4ff;
     --column-gap: 15px;
     --box-shadow-card: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    --code-background: #f6f8fa;
 }
 
 html[data-theme='dark']{
@@ -37,6 +38,7 @@ html[data-theme='dark']{
     --variant-highlight: #6282ff1a;
     --variant-highlight-alt: #6282ff26;
     --box-shadow-card: 0 -3px 12px rgb(0 0 0);
+    --code-background: #6e76815e;
 }
 
 *{
@@ -61,9 +63,14 @@ p,ul {
 }
 
 code{
-    background: var(--background);
+    background: var(--code-background);
     padding: 3px 5px;
     border-radius: 4px;
+}
+
+pre code{
+    padding: 0;
+    border-radius: 0;
 }
 
 h1{

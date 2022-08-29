@@ -1,5 +1,5 @@
 _site/index.html: $(wildcard *.yml) templates/index.html src/build.py venv
-	. venv/bin/activate; python src/build.py > _site/index.html
+	. venv/bin/activate; python src/build.py
 
 venv: venv/touchfile
 
