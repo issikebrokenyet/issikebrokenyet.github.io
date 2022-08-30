@@ -121,4 +121,4 @@ dartois-de-feo:
     DD21: 'https://eprint.iacr.org/2021/1681'
   comment: >-
     Despite the exponential complexity, practically breaks proposed
-    [#scheme-osidh](OSIDH) parameters.
+    [OSIDH](#scheme-osidh) parameters.

@@ -169,7 +169,7 @@ vector:
       comment: >-
         The variant where the set is a set of supersingular curves
         defined over a prime field $\mathbb{F}_p$, and the set is the
-        class group Cl(√-p). The reduction to the Endomorphism ring
+        class group ($\textrm{Cl}(\sqrt{-p})$. The reduction to the Endomorphism ring
         problem over $\mathbb{F}_p$ was done in steps in [CPV19] and
         [Wes21].
     oriented:
