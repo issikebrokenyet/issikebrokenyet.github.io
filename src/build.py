@@ -448,6 +448,8 @@ with open('attacks.yml') as att:
 #-------------------------------------------------------#
 with open('README.md') as f:
     about_markdown = f.read()
+    # Remove the header from the README
+    about_markdown = about_markdown.split('---')[-1]
     about_html     =  markdown.markdown(about_markdown, 
                                 extensions=["fenced_code", "codehilite"])
     env = Environment(

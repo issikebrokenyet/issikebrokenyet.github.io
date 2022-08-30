@@ -4,6 +4,7 @@
 
 A knowledge base of most isogeny based cryptosystems and the best attacks on them.
 
+---
 
 ## What? Why?
 

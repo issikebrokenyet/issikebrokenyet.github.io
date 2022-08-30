@@ -3,6 +3,7 @@
     padding: 16px;
     border-radius: 6px;
     background-color: #f6f8fa;
+    overflow-x: scroll;
 }
 .codehilite code { 
     background-color: #f6f8fa;
