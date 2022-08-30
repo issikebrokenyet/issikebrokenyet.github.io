@@ -47,7 +47,7 @@ html[data-theme='dark']{
 
 html{
     margin: 0 1em;
-    font-family:  sans-serif;
+    font-family:  ui-sans-serif, sans-serif;
 }
 
 body{
@@ -64,6 +64,8 @@ p,ul {
 
 code{
     background: var(--code-background);
+    font-family: ui-monospace, monospace;
+    font-size: 0.85em;
     padding: 3px 5px;
     border-radius: 4px;
 }
