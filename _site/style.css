@@ -84,7 +84,6 @@ a:visited{
 .grid-wrapper{
     margin-bottom: 4em;
     line-height: 1.22;
-    overflow: scroll;
 }
 .grid-head,
 .grid-body{
