@@ -10,9 +10,9 @@ sidh:
     DJP14: 'https://eprint.iacr.org/2011/506'
     CLN16: 'https://eprint.iacr.org/2016/413'
   comment: >-
-    [JDF11] explored using isogenies of degree $ℓ^e$ for various
+    [JDF11] explored using isogenies of degree $\ell^e$ for various
     choices of $\ell$. It is only with [DJP14] that the choice of
-    $ℓ=2,3$ became standard. The choice of having $p = 3 \bmod 4$ and
+    $\ell=2,3$ became standard. The choice of having $p = 3 \bmod 4$ and
     of a specific starting curve did not become standard until
     [CLN16].
   variants:

@@ -158,9 +158,9 @@ vector:
     Sto10: 'https://dx.doi.org/10.3934/amc.2010.4.215'
     GP+18: 'https://eprint.iacr.org/2018/1199'
   comment: >-
-    Given two random elements x₀, x₁ in a set acted upon transitively
-    by a group G, find an element of G that maps x₀ to x₁. By random
-    self-reducibility, this is equivalent to the problem where x₀ is
+    Given two random elements $x_0$, $x_1$ in a set acted upon transitively
+    by a group $G$, find an element of G that maps $x_0$ to $x_1$. By random
+    self-reducibility, this is equivalent to the problem where $x_0$ is
     fixed.
   variants:
     ordinary:
@@ -168,8 +168,8 @@ vector:
         long: Vectorization (ordinary)
       comment: >-
         The variant where the set is a set of ordinary curves with
-        endomorphism ring isomorphic to an order O, and the set is the
-        class group of O.
+        endomorphism ring isomorphic to an order $\mathcal{O}$, and the set is the
+        class group of $\mathcal{O}$.
     supersingular:
       name:
         long: Vectorization (supersingular)
@@ -200,7 +200,7 @@ vector:
         with an *orientation* (an explicit embedding of a quadratic
         imaginary order into the endomorphism ring of the curve) and
         the group is the class group of the orientation.  Shown to be
-        equivalent to O-EndRing in [Wes21].
+        equivalent to $\mathcal{O}$-EndRing in [Wes21].
 
 parallelization:
   name:
@@ -234,7 +234,7 @@ parallelization:
         CK20: 'https://eprint.iacr.org/2020/985'
         Wes21: 'https://eprint.iacr.org/2021/1583'
       comment: >-
-        Shown to be equivalent to O-EndRing in [Wes21]
+        Shown to be equivalent to $\mathcal{O}$-EndRing in [Wes21]
 
 gaddh:
   name:
@@ -274,7 +274,9 @@ dssp:
     DJP14: 'https://eprint.iacr.org/2011/506'
     DD+21: "https://eprint.iacr.org/2021/1023"
   comment: >-
-    Given two supersingular isogenies $φ:E₀→E₁$ and $φ':E₂→E₃$ of the
+    Given two supersingular isogenies $\phi: E_0 \to E_1$ and 
+    $\phi': E_2 \to E_3$ of the
     same degree $A$, and given an integer $B$ coprime to $A$, decide
-    whether there exist isogenies $ψ:E₀→E₂$ and $ψ':E₁→E₃$ of degree
-    $B$ such that $φ,φ′,ψ,ψ'$ form a commutative diagram.
+    whether there exist isogenies $\psi: E_0 \to E_2$ and 
+    $\psi': E_1 \to E_3$ of degree
+    $B$ such that $\phi,\phi',\psi,\psi'$ form a commutative diagram.
