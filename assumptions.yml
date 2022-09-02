@@ -70,6 +70,19 @@ bsidh:
   comment: >-
     The analogue of the SIDH problem for B-SIDH.
 
+osidh:
+  name:
+    long: OSIDH
+  attacks:
+    - dartois-de-feo
+  references:
+    CK20: https://eprint.iacr.org/2020/985.pdf
+  comment: >-
+    A generalisation of CSIDH in which the orientation 
+    and class group action is hidden in intermediate
+    data, protecting against Kuperberg's subexponential
+    quantum attack
+    
 ssisopath:
   name:
     long: The supersingular isogeny path problem

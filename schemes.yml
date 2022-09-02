@@ -118,7 +118,7 @@ osidh:
     - Key Exchange
     - Non Interactive Key Exchange
   assumptions:
-    - parallelization>oriented
+    - osidh
   references:
     CK20: 'https://eprint.iacr.org/2020/985'
   comment: >-
