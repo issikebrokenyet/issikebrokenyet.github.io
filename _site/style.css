@@ -256,6 +256,7 @@ abbr[title=""] {
 
 .complexity a{
     color: inherit;
+    text-underline-position: under;
 }
 
 a.reference-link{
