@@ -2,6 +2,9 @@ import yaml
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
 from fractions import Fraction
 import markdown
+from markdown.treeprocessors import Treeprocessor
+from markdown.extensions import Extension
+from urllib.parse import urljoin
 import re
 from functools import cached_property
 import inspect
@@ -446,12 +449,22 @@ with open('attacks.yml') as att:
 #-------------------------------------------------------#
 # Open README.html and render as HTML for an about page #
 #-------------------------------------------------------#
+class Absolutizer(Treeprocessor, Extension):
+    def run(self, root):
+        for a in root.findall('.//a[@href]'):
+            a.set('href', urljoin(
+                'https://github.com/issikebrokenyet/issikebrokenyet.github.io/blob/main/',
+                a.get('href')))
+
+    def extendMarkdown(self, md):
+        md.treeprocessors.register(self, 'absolutizer', 1)
+
 with open('README.md') as f:
     about_markdown = f.read()
     # Remove the header from the README
     about_markdown = about_markdown.split('---')[-1]
     about_html     =  markdown.markdown(about_markdown, 
-                                extensions=["fenced_code", "codehilite"])
+                                extensions=[Absolutizer(), "fenced_code", "codehilite"])
     env = Environment(
                 loader = FileSystemLoader("templates"),
                 autoescape=select_autoescape()

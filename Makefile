@@ -1,4 +1,4 @@
-_site/index.html: $(wildcard *.yml) templates/index.html src/build.py venv
+_site/index.html: $(wildcard *.yml) $(wildcard templates/*.html) README.md src/build.py venv
 	. venv/bin/activate; python src/build.py
 
 venv: venv/touchfile
