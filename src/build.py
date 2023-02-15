@@ -2,6 +2,9 @@ import yaml
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
 from fractions import Fraction
 import markdown
+from markdown.treeprocessors import Treeprocessor
+from markdown.extensions import Extension
+from urllib.parse import urljoin
 import re
 from functools import cached_property
 import inspect
@@ -430,11 +433,48 @@ with open('attacks.yml') as att:
                 autoescape=select_autoescape()
             )
             index = env.get_template("index.html")
-            print(index.render(
+            index_page = index.render(
                 schemes_head=Scheme.header,
                 schemes="\n".join(repr(a) for a in schemes.values()),
                 assumptions_head=Assumption.header,
                 assumptions="\n".join(repr(a) for a in assumptions.values()),
                 attacks_head=Attack.header,
                 attacks="\n".join(repr(a) for a in attacks.values())
-            ))
+            )
+
+            # Save output to index file
+            with open('_site/index.html', 'w') as f:
+                f.write(index_page)
+
+#-------------------------------------------------------#
+# Open README.html and render as HTML for an about page #
+#-------------------------------------------------------#
+class Absolutizer(Treeprocessor, Extension):
+    def run(self, root):
+        for a in root.findall('.//a[@href]'):
+            a.set('href', urljoin(
+                'https://github.com/issikebrokenyet/issikebrokenyet.github.io/blob/main/',
+                a.get('href')))
+
+    def extendMarkdown(self, md):
+        md.treeprocessors.register(self, 'absolutizer', 1)
+
+with open('README.md') as f:
+    about_markdown = f.read()
+    # Remove the header from the README
+    about_markdown = about_markdown.split('---')[-1]
+    about_html     =  markdown.markdown(about_markdown, 
+                                extensions=[Absolutizer(), "fenced_code", "codehilite"])
+    env = Environment(
+                loader = FileSystemLoader("templates"),
+                autoescape=select_autoescape()
+            )
+    about = env.get_template("about.html")
+    about_page = about.render(about_content=about_html)
+
+    # Save output to about file
+    with open('_site/about.html', 'w') as f:
+        f.write(about_page)
+
+
+

@@ -18,6 +18,7 @@ html[data-theme='light']{
     --variant-highlight-alt: #f0f4ff;
     --column-gap: 15px;
     --box-shadow-card: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    --code-background: #f6f8fa;
 }
 
 html[data-theme='dark']{
@@ -37,6 +38,7 @@ html[data-theme='dark']{
     --variant-highlight: #6282ff1a;
     --variant-highlight-alt: #6282ff26;
     --box-shadow-card: 0 -3px 12px rgb(0 0 0);
+    --code-background: #6e76815e;
 }
 
 *{
@@ -45,7 +47,7 @@ html[data-theme='dark']{
 
 html{
     margin: 0 1em;
-    font-family:  sans-serif;
+    font-family:  ui-sans-serif, sans-serif;
 }
 
 body{
@@ -56,19 +58,39 @@ body{
     color: var(--text);
 }
 
+header{
+    margin: 3em 0 5em 0; 
+}
+
+header h1{
+    margin: 1em 0;
+}
+
+.navigation{
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+}
+
 p,ul {
     line-height: 1.8;
 }
 
 code{
-    background: var(--background);
+    background: var(--code-background);
+    font-family: ui-monospace, monospace;
+    font-size: 0.85em;
     padding: 3px 5px;
     border-radius: 4px;
 }
 
+pre code{
+    padding: 0;
+    border-radius: 0;
+}
+
 h1{
     text-align: center;
-    margin-bottom: 2em;
 }
 
 a,a:hover{
@@ -76,6 +98,16 @@ a,a:hover{
 }
 a:visited{
     color: var(--link-visited);
+}
+.navigation a,
+.navigation a:hover
+.navigation a:visited{
+    color: var(--dimmed-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.navigation a:hover{
+    color: var(--color);
 }
 
 /*
@@ -270,7 +302,10 @@ a.reference-link:visited{
 
 footer {
     margin: 2em 0;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 3em;
+    align-items: baseline;
 }
 
 /* Button Loops like Link */
@@ -278,7 +313,7 @@ footer {
     border: none;
     background: var(--background);
     font-size: 1em;
-    color: var(--blue);
+    color: var(--link);
     text-decoration: underline;
     cursor: pointer;
 }
@@ -375,6 +410,10 @@ footer {
     .comment-cell h4{
         margin: 1rem 0;
         display: none;
+    }
+
+    .markdown-content h2{
+        margin-left: 0;
     }
 
 }

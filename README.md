@@ -4,6 +4,7 @@
 
 A knowledge base of most isogeny based cryptosystems and the best attacks on them.
 
+---
 
 ## What? Why?
 
@@ -215,7 +216,8 @@ kuperberg:
 ```
 
 If all this looks too complicated, but you still want to suggest
-adding a scheme, assumption or attack, [create an issue](issues).
+adding a scheme, assumption or attack, [create an
+issue](https://github.com/issikebrokenyet/issikebrokenyet.github.io/issues).
 Also create an issue if you want to suggest additions to the data
 model.
 
