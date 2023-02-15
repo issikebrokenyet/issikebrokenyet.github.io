@@ -144,7 +144,8 @@ vector:
     fixed.
 
   # A dictionary of variants of the assumption above.
-  # These must be special instances of the parent assumption.
+  # These must be special instances of the parent assumption, so they
+  # are also broken by attacks on the parent.
   # Link to them using the syntax `parent>variant`.
   # Each entry supports the same keys as the main entry.
   variants:
@@ -178,7 +179,7 @@ vector:
 # A short lowercase identifier for the attack. Must be unique.
 kuperberg:
 
-  # The assumption must have at least one of a short or long form name
+  # The attack must have at least one of a short or long form name
   name:
     long: Kuperberg
     
@@ -192,7 +193,7 @@ kuperberg:
   # - poly: shortcut for L(0)
   # - poly(c): shortcut for L(0,c)
   # - exp: shortcut for L(1)
-  # - exp(a): shortcut for L(1,a)
+  # - exp(c): shortcut for L(1,c)
   complexity: L(1/2)
   
   # Whether this is a quantum attack
